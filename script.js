@@ -153,17 +153,24 @@ async function initCatalog() {
         }
     }
 
+    // Styles for toggling
+    const activeClasses = ['bg-gradient-to-r', 'from-brand-500', 'to-purple-600', 'text-white', 'shadow-md', 'shadow-pink-500/30', 'font-semibold'];
+    const inactiveClasses = ['bg-white', 'border', 'border-stone-200', 'text-stone-600', 'hover:border-brand-300', 'hover:text-brand-600', 'hover:bg-pink-50', 'hover:shadow-md', 'font-medium'];
+
     // Event Listeners
     searchInput?.addEventListener('input', (e) => { state.search = e.target.value; render(); });
     
     categoryBtns.forEach(btn => {
         btn.addEventListener('click', () => {
+            // Reset all buttons to inactive state
             categoryBtns.forEach(b => {
-                b.classList.remove('bg-brand-600', 'text-white');
-                b.classList.add('bg-white', 'text-gray-600');
+                b.classList.remove(...activeClasses);
+                b.classList.add(...inactiveClasses);
             });
-            btn.classList.remove('bg-white', 'text-gray-600');
-            btn.classList.add('bg-brand-600', 'text-white');
+            // Set active button
+            btn.classList.remove(...inactiveClasses);
+            btn.classList.add(...activeClasses);
+
             state.category = btn.dataset.category;
             render();
         });
