@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Luxe Rentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-900 antialiased">
+
+    <div id="admin-login" class="fixed inset-0 z-50 bg-stone-900 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Admin Login</h2>
+            <form id="admin-login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="admin-password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 p-3 border" placeholder="Enter admin password">
+                </div>
+                <button type="submit" class="w-full bg-pink-600 text-white py-3 rounded-lg font-bold hover:bg-pink-700 transition">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="hidden min-h-screen flex flex-col md:flex-row">
+        <aside class="w-full md:w-64 bg-stone-900 text-stone-300 flex-shrink-0">
+            <div class="p-6 border-b border-stone-800">
+                <h1 class="text-2xl font-serif font-bold text-white">Luxe Rentals <span class="text-pink-500 text-xs block uppercase tracking-wider">Admin</span></h1>
+            </div>
+            <nav class="p-4 space-y-2">
+                <button onclick="switchTab('dashboard')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800 text-left transition active-tab bg-stone-800 text-white" id="tab-dashboard">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </button>
+                <button onclick="switchTab('products')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800 text-left transition" id="tab-products">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i> Products
+                </button>
+                <button onclick="logoutAdmin()" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-900/50 text-red-400 text-left transition mt-8">
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+                </button>
+            </nav>
+        </aside>
+
+        <main class="flex-grow p-6 md:p-8 overflow-y-auto">
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="space-y-6">
+                <h2 class="text-2xl font-bold mb-6">Overview</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-sm text-gray-500 mb-1">Total Products</p><h3 class="text-3xl font-bold" id="dash-total-products">0</h3></div>
+                            <div class="p-3 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="package" class="w-6 h-6"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 p-6 rounded-xl mt-8">
+                    <h3 class="text-lg font-bold text-purple-900 mb-2">How to update your site</h3>
+                    <ol class="list-decimal list-inside text-purple-800 text-sm space-y-2">
+                        <li>Go to the <strong>Products</strong> tab.</li>
+                        <li>Make your changes (Add products, toggle availability, delete).</li>
+                        <li>Click the <strong>"Save Changes to JSON"</strong> button.</li>
+                        <li>Copy the generated code.</li>
+                        <li>Paste it into your <code>products.json</code> file in your code editor.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Products View -->
+            <div id="view-products" class="hidden space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <h2 class="text-2xl font-bold">Product Management</h2>
+                    <div class="flex gap-3">
+                        <button onclick="exportJSON()" class="bg-stone-800 text-white px-4 py-2 rounded-lg font-medium hover:bg-stone-700 flex items-center gap-2 shadow-sm">
+                            <i data-lucide="save" class="w-4 h-4"></i> Save Changes to JSON
+                        </button>
+                        <button onclick="openAddModal()" class="bg-pink-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-pink-700 flex items-center gap-2 shadow-sm shadow-pink-200">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Add Product
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                                <tr>
+                                    <th class="p-4 border-b">Product</th>
+                                    <th class="p-4 border-b">Category</th>
+                                    <th class="p-4 border-b">Price</th>
+                                    <th class="p-4 border-b">Availability</th>
+                                    <th class="p-4 border-b text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-product-list" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="add-modal" class="hidden fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-xl">
+                <h3 class="text-xl font-bold text-gray-800">Add New Product</h3>
+                <button onclick="closeAddModal()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Product ID</label><input type="text" id="new-id" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="e.g. CH009"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Name</label><input type="text" id="new-name" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="Product Name"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Category</label><select id="new-category" class="w-full border border-gray-300 rounded-lg p-2 outline-none"><option>Bridal</option><option>Sangeet</option><option>Party Wear</option><option>Reception</option></select></div>
+                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Size</label><input type="text" id="new-size" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="e.g. M"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Rent Price (₹)</label><input type="number" id="new-price" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Original Price (₹)</label><input type="number" id="new-original" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none"></div>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Image URL</label><input type="text" id="new-image" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="https://..."></div>
+                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Description</label><textarea id="new-desc" class="w-full border border-gray-300 rounded-lg p-2 h-24 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="Product description..."></textarea></div>
+            </div>
+            <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-xl">
+                <button onclick="closeAddModal()" class="px-5 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">Cancel</button>
+                <button onclick="addNewProduct()" class="px-5 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 shadow-md">Add Product</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export JSON Modal -->
+    <div id="export-modal" class="hidden fixed inset-0 z-[70] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[90vh]">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-stone-900 text-white rounded-t-xl">
+                <div>
+                    <h3 class="text-lg font-bold">Update products.json</h3>
+                    <p class="text-xs text-stone-400">Copy the code below and paste it into your file.</p>
+                </div>
+                <button onclick="closeExportModal()" class="text-white/70 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="p-0 flex-grow relative bg-slate-900">
+                <textarea id="json-export-output" class="w-full h-[50vh] bg-slate-900 text-green-400 font-mono text-xs p-4 outline-none resize-none" readonly></textarea>
+                <button onclick="copyToClipboard()" class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded text-xs border border-white/20 backdrop-blur">Copy to Clipboard</button>
+            </div>
+            <div class="p-5 border-t border-gray-200 bg-gray-50 flex justify-end rounded-b-xl">
+                <button onclick="closeExportModal()" class="px-6 py-2 bg-stone-800 text-white font-bold rounded-lg hover:bg-stone-900">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

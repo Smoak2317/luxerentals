@@ -1,0 +1,113 @@
+/* Global Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #1f2937; /* Gray-800 */
+}
+
+.font-serif {
+  font-family: 'Playfair Display', 'Georgia', serif;
+}
+
+/* Gradient Text */
+.text-gradient {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 50%, #be185d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-pink {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+}
+
+/* Green Gradient for WhatsApp */
+.bg-gradient-green {
+  background: linear-gradient(135deg, #22c55e 0%, #059669 100%); /* green-500 to emerald-600 */
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Hover Lift Effect */
+.hover-lift {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+/* Loading Spinner */
+.btn-spinner {
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top: 2px solid white;
+  width: 1em;
+  height: 1em;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Modal Scrollbar */
+#modal-panel::-webkit-scrollbar {
+  width: 6px;
+}
+#modal-panel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+#modal-panel::-webkit-scrollbar-thumb {
+  background: #f472b6; 
+  border-radius: 4px;
+}
+
+/* Hide scrollbar for category selector */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
