@@ -1,3 +1,4 @@
+
 // Configuration
 const WHATSAPP_NUMBER = "7201800959";
 const PRODUCTS_URL = 'products.json';
@@ -281,6 +282,22 @@ function confirmRent() {
         alert("Please fill in all details to proceed.");
         return;
     }
+
+    // --- TRACKING LOGIC ---
+    const inquiry = {
+        date: new Date().toLocaleString(),
+        productId: currentRentProduct.id,
+        productName: currentRentProduct.name,
+        customerName: name,
+        mobile: mobile,
+        requestedDate: date
+    };
+
+    // Save to LocalStorage for Admin Panel
+    const existingInquiries = JSON.parse(localStorage.getItem('luxe_inquiries') || '[]');
+    existingInquiries.unshift(inquiry);
+    localStorage.setItem('luxe_inquiries', JSON.stringify(existingInquiries));
+    // ---------------------
 
     // Construct detailed message
     const productLink = window.location.origin + window.location.pathname.replace('index.html', '').replace('products.html', '') + `detail.html?id=${currentRentProduct.id}`;

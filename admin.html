@@ -34,6 +34,9 @@
                 <button onclick="switchTab('products')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800 text-left transition" id="tab-products">
                     <i data-lucide="shopping-bag" class="w-5 h-5"></i> Products
                 </button>
+                <button onclick="switchTab('inquiries')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800 text-left transition" id="tab-inquiries">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp Inquiries
+                </button>
                 <button onclick="logoutAdmin()" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-900/50 text-red-400 text-left transition mt-8">
                     <i data-lucide="log-out" class="w-5 h-5"></i> Logout
                 </button>
@@ -51,15 +54,20 @@
                             <div class="p-3 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="package" class="w-6 h-6"></i></div>
                         </div>
                     </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="flex justify-between items-start">
+                            <div><p class="text-sm text-gray-500 mb-1">Total Inquiries</p><h3 class="text-3xl font-bold" id="dash-total-inquiries">0</h3></div>
+                            <div class="p-3 bg-green-50 text-green-600 rounded-lg"><i data-lucide="message-circle" class="w-6 h-6"></i></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 p-6 rounded-xl mt-8">
                     <h3 class="text-lg font-bold text-purple-900 mb-2">How to update your site</h3>
                     <ol class="list-decimal list-inside text-purple-800 text-sm space-y-2">
-                        <li>Go to the <strong>Products</strong> tab.</li>
-                        <li>Make your changes (Add products, toggle availability, delete).</li>
+                        <li>Go to the <strong>Products</strong> tab to Add or Edit items.</li>
+                        <li>Use the drag & drop zone to change images.</li>
                         <li>Click the <strong>"Save Changes to JSON"</strong> button.</li>
-                        <li>Copy the generated code.</li>
-                        <li>Paste it into your <code>products.json</code> file in your code editor.</li>
+                        <li>Copy the generated code and paste it into your <code>products.json</code> file.</li>
                     </ol>
                 </div>
             </div>
@@ -95,17 +103,43 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Inquiries View -->
+             <div id="view-inquiries" class="hidden space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <h2 class="text-2xl font-bold">WhatsApp Inquiries Data</h2>
+                    <button onclick="clearInquiries()" class="text-red-500 hover:text-red-700 text-sm font-medium">Clear History</button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                                <tr>
+                                    <th class="p-4 border-b">Date</th>
+                                    <th class="p-4 border-b">Customer</th>
+                                    <th class="p-4 border-b">Mobile</th>
+                                    <th class="p-4 border-b">Product</th>
+                                    <th class="p-4 border-b">Requested Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-inquiry-list" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
-    <!-- Add Product Modal -->
+    <!-- Add/Edit Product Modal -->
     <div id="add-modal" class="hidden fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-xl">
-                <h3 class="text-xl font-bold text-gray-800">Add New Product</h3>
+                <h3 class="text-xl font-bold text-gray-800" id="modal-title">Add New Product</h3>
                 <button onclick="closeAddModal()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             <div class="p-6 space-y-4">
+                <input type="hidden" id="edit-mode-id">
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Product ID</label><input type="text" id="new-id" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="e.g. CH009"></div>
                     <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Name</label><input type="text" id="new-name" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="Product Name"></div>
@@ -114,12 +148,32 @@
                     <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Rent Price (₹)</label><input type="number" id="new-price" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none"></div>
                     <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Original Price (₹)</label><input type="number" id="new-original" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none"></div>
                 </div>
-                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Image URL</label><input type="text" id="new-image" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="https://..."></div>
-                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Description</label><textarea id="new-desc" class="w-full border border-gray-300 rounded-lg p-2 h-24 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="Product description..."></textarea></div>
+
+                <!-- Drag and Drop Image -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Product Image</label>
+                    <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-50 hover:border-pink-400 transition">
+                        <i data-lucide="image-plus" class="w-8 h-8 text-gray-400 mb-2"></i>
+                        <p class="text-sm text-gray-600">Drag & Drop or <span class="text-pink-600 font-bold">Click to Upload</span></p>
+                        <p class="text-xs text-gray-400 mt-1">Supports JPG, PNG</p>
+                        <input type="file" id="file-input" class="hidden" accept="image/*">
+                    </div>
+                    <!-- Preview -->
+                    <div id="image-preview-container" class="hidden mt-3 flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-100">
+                        <img id="image-preview" src="" class="w-12 h-12 rounded object-cover">
+                        <div class="flex-grow">
+                            <p class="text-xs text-green-600 font-bold">Image Selected</p>
+                            <input type="text" id="new-image" class="w-full bg-transparent text-xs text-gray-500 border-none p-0 focus:ring-0" placeholder="Image URL or Base64 data..." readonly>
+                        </div>
+                        <button onclick="clearImage()" class="text-gray-400 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+
+                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Description</label><textarea id="new-desc" class="w-full border border-gray-300 rounded-lg p-2 h-20 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="Product description..."></textarea></div>
             </div>
             <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-xl">
                 <button onclick="closeAddModal()" class="px-5 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">Cancel</button>
-                <button onclick="addNewProduct()" class="px-5 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 shadow-md">Add Product</button>
+                <button onclick="saveProduct()" id="save-btn" class="px-5 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 shadow-md">Add Product</button>
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 // Admin Logic
 let adminProducts = []; // Holds the state of products in the admin panel
+let adminInquiries = [];
 
 // Check Auth on Load
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showPanel();
         initAdminData();
     }
+    setupDragAndDrop();
 });
 
 // Login Handler
@@ -46,25 +48,33 @@ function switchTab(tabName) {
     document.getElementById(`tab-${tabName}`).classList.remove('text-stone-300');
 
     if (tabName === 'products') renderProductTable();
+    if (tabName === 'inquiries') renderInquiriesTable();
 }
 
 // Data Initialization
 async function initAdminData() {
     try {
+        // Load Products
         const res = await fetch('products.json');
         if (res.ok) {
             adminProducts = await res.json();
-            // Update Dashboard Counters
             document.getElementById('dash-total-products').textContent = adminProducts.length;
-            // Render Table
             renderProductTable();
+        }
+
+        // Load Inquiries from LocalStorage
+        const savedInquiries = localStorage.getItem('luxe_inquiries');
+        if (savedInquiries) {
+            adminInquiries = JSON.parse(savedInquiries);
+            document.getElementById('dash-total-inquiries').textContent = adminInquiries.length;
         }
     } catch (e) {
         console.error("Failed to fetch products", e);
     }
 }
 
-// Render Table
+// --- Render Tables ---
+
 function renderProductTable() {
     const tbody = document.getElementById('admin-product-list');
     tbody.innerHTML = '';
@@ -89,7 +99,10 @@ function renderProductTable() {
                     ${p.available ? 'Available' : 'Booked'}
                 </button>
             </td>
-            <td class="p-4 text-right">
+            <td class="p-4 text-right flex justify-end gap-2">
+                <button onclick="editProduct('${p.id}')" class="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded transition">
+                     <i data-lucide="edit" class="w-4 h-4"></i>
+                </button>
                 <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded transition">
                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                 </button>
@@ -98,34 +111,107 @@ function renderProductTable() {
         tbody.appendChild(tr);
     });
     
-    // Refresh icons
     if (window.lucide) lucide.createIcons();
+}
+
+function renderInquiriesTable() {
+    const tbody = document.getElementById('admin-inquiry-list');
+    tbody.innerHTML = '';
+
+    if (adminInquiries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-gray-400">No inquiries tracked yet.</td></tr>';
+        return;
+    }
+
+    adminInquiries.forEach(inq => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-gray-50 transition border-b border-gray-100";
+        tr.innerHTML = `
+            <td class="p-4 text-sm text-gray-600">${inq.date}</td>
+            <td class="p-4 font-bold text-gray-900">${inq.customerName}</td>
+            <td class="p-4 text-sm text-gray-600 font-mono">${inq.mobile}</td>
+            <td class="p-4 text-sm text-pink-600 font-medium">${inq.productName} <span class="text-xs text-gray-400">(${inq.productId})</span></td>
+             <td class="p-4 text-sm text-gray-600">${inq.requestedDate || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function clearInquiries() {
+    if(confirm("Are you sure you want to clear all inquiry history?")) {
+        adminInquiries = [];
+        localStorage.removeItem('luxe_inquiries');
+        renderInquiriesTable();
+        document.getElementById('dash-total-inquiries').textContent = 0;
+    }
 }
 
 // --- Product Actions ---
 
-// 1. Toggle Availability
 function toggleAvailability(id) {
     const product = adminProducts.find(p => p.id === id);
     if (product) {
         product.available = !product.available;
         renderProductTable();
-        // Visual feedback could be added here
     }
 }
 
-// 2. Add Product
+// Open Modal for ADD
 function openAddModal() {
+    document.getElementById('modal-title').textContent = "Add New Product";
+    document.getElementById('save-btn').textContent = "Add Product";
+    document.getElementById('edit-mode-id').value = "";
+    
+    // Clear inputs
+    document.getElementById('new-id').value = "";
+    document.getElementById('new-name').value = "";
+    document.getElementById('new-category').value = "Bridal";
+    document.getElementById('new-price').value = "";
+    document.getElementById('new-original').value = "";
+    document.getElementById('new-size').value = "";
+    document.getElementById('new-desc').value = "";
+    clearImage(); // Reset image input
+
+    document.getElementById('add-modal').classList.remove('hidden');
+}
+
+// Open Modal for EDIT
+function editProduct(id) {
+    const product = adminProducts.find(p => p.id === id);
+    if (!product) return;
+
+    document.getElementById('modal-title').textContent = "Edit Product";
+    document.getElementById('save-btn').textContent = "Update Product";
+    document.getElementById('edit-mode-id').value = id;
+
+    // Populate fields
+    document.getElementById('new-id').value = product.id;
+    document.getElementById('new-name').value = product.name;
+    document.getElementById('new-category').value = product.category;
+    document.getElementById('new-price').value = product.price;
+    document.getElementById('new-original').value = product.originalPrice;
+    document.getElementById('new-size').value = product.size;
+    document.getElementById('new-desc').value = product.description;
+    
+    // Set Image Preview
+    document.getElementById('new-image').value = product.image;
+    document.getElementById('image-preview').src = product.image;
+    document.getElementById('drop-zone').classList.add('hidden');
+    document.getElementById('image-preview-container').classList.remove('hidden');
+
     document.getElementById('add-modal').classList.remove('hidden');
 }
 
 function closeAddModal() {
     document.getElementById('add-modal').classList.add('hidden');
-    // Clear inputs if needed
 }
 
-function addNewProduct() {
-    const newProduct = {
+// Save (Add or Update)
+function saveProduct() {
+    const editId = document.getElementById('edit-mode-id').value;
+    const isEdit = !!editId;
+
+    const data = {
         id: document.getElementById('new-id').value || `CH${Math.floor(Math.random() * 1000)}`,
         name: document.getElementById('new-name').value,
         category: document.getElementById('new-category').value,
@@ -133,22 +219,31 @@ function addNewProduct() {
         originalPrice: Number(document.getElementById('new-original').value) || 0,
         description: document.getElementById('new-desc').value,
         image: document.getElementById('new-image').value || 'https://via.placeholder.com/400',
-        available: true,
+        available: true, // Default to true if new
         size: document.getElementById('new-size').value
     };
 
-    if (!newProduct.name || !newProduct.price) {
+    if (!data.name || !data.price) {
         alert("Name and Price are required.");
         return;
     }
 
-    adminProducts.push(newProduct);
+    if (isEdit) {
+        const index = adminProducts.findIndex(p => p.id === editId);
+        if (index !== -1) {
+            // Keep availability status from existing
+            data.available = adminProducts[index].available;
+            adminProducts[index] = data;
+        }
+    } else {
+        adminProducts.push(data);
+    }
+
     closeAddModal();
     renderProductTable();
-    alert("Product added to list! Don't forget to 'Save Changes to JSON'.");
+    alert(isEdit ? "Product updated!" : "Product added!");
 }
 
-// 3. Delete Product
 function deleteProduct(id) {
     if (confirm("Delete this product from the list?")) {
         adminProducts = adminProducts.filter(p => p.id !== id);
@@ -156,7 +251,65 @@ function deleteProduct(id) {
     }
 }
 
-// 4. Export / Save
+// --- Drag and Drop Image Logic ---
+
+function setupDragAndDrop() {
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-pink-500', 'bg-pink-50');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-pink-500', 'bg-pink-50');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-pink-500', 'bg-pink-50');
+        if (e.dataTransfer.files.length) {
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            handleFile(e.target.files[0]);
+        }
+    });
+}
+
+function handleFile(file) {
+    if (!file.type.startsWith('image/')) {
+        alert("Please select an image file.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const base64Data = e.target.result;
+        document.getElementById('new-image').value = base64Data;
+        document.getElementById('image-preview').src = base64Data;
+        
+        // Show Preview, Hide Drop Zone
+        document.getElementById('drop-zone').classList.add('hidden');
+        document.getElementById('image-preview-container').classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearImage() {
+    document.getElementById('new-image').value = "";
+    document.getElementById('file-input').value = ""; // Reset file input
+    document.getElementById('drop-zone').classList.remove('hidden');
+    document.getElementById('image-preview-container').classList.add('hidden');
+}
+
+// --- Export / Save ---
 function exportJSON() {
     const jsonString = JSON.stringify(adminProducts, null, 2);
     document.getElementById('json-export-output').value = jsonString;
