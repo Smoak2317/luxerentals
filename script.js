@@ -133,16 +133,13 @@ async function initCatalog() {
     const products = await fetchProducts();
     const searchInput = document.getElementById('search');
     const categoryBtns = document.querySelectorAll('.category-btn');
-    const priceRange = document.getElementById('price-range');
-    const priceValue = document.getElementById('price-value');
 
-    let state = { category: 'All', search: '', maxPrice: 5000 };
+    let state = { category: 'All', search: '' };
 
     function render() {
         const filtered = products.filter(p => {
             return (state.category === 'All' || p.category === state.category) &&
-                   (p.name.toLowerCase().includes(state.search.toLowerCase())) &&
-                   (p.price <= state.maxPrice);
+                   (p.name.toLowerCase().includes(state.search.toLowerCase()));
         });
 
         if (filtered.length === 0) {
@@ -174,12 +171,6 @@ async function initCatalog() {
             state.category = btn.dataset.category;
             render();
         });
-    });
-
-    priceRange?.addEventListener('input', (e) => {
-        state.maxPrice = Number(e.target.value);
-        priceValue.textContent = `₹${state.maxPrice}`;
-        render();
     });
 
     render();
@@ -263,6 +254,8 @@ function openRentModal(product) {
     const modal = document.getElementById('rent-modal');
     if (modal) {
         modal.classList.remove('hidden');
+        // Prevent background scrolling
+        document.body.classList.add('overflow-hidden');
         setTimeout(() => {
             document.getElementById('rent-modal-backdrop').classList.remove('opacity-0');
             document.getElementById('rent-modal-panel').classList.remove('opacity-0', 'scale-95');
@@ -275,7 +268,11 @@ function closeRentModal() {
     if (modal) {
         document.getElementById('rent-modal-backdrop').classList.add('opacity-0');
         document.getElementById('rent-modal-panel').classList.add('opacity-0', 'scale-95');
-        setTimeout(() => modal.classList.add('hidden'), 300);
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            // Restore background scrolling
+            document.body.classList.remove('overflow-hidden');
+        }, 300);
     }
 }
 
@@ -385,6 +382,8 @@ function openQuickView(event, productId) {
     // Show Modal
     const modal = document.getElementById('quick-view-modal');
     modal.classList.remove('hidden');
+    // Prevent background scrolling
+    document.body.classList.add('overflow-hidden');
     setTimeout(() => {
         document.getElementById('modal-backdrop').classList.remove('opacity-0');
         document.getElementById('modal-panel').classList.remove('opacity-0', 'scale-95');
@@ -396,7 +395,11 @@ function closeQuickView() {
     const panel = document.getElementById('modal-panel');
     backdrop.classList.add('opacity-0');
     panel.classList.add('opacity-0', 'scale-95');
-    setTimeout(() => document.getElementById('quick-view-modal').classList.add('hidden'), 300);
+    setTimeout(() => {
+        document.getElementById('quick-view-modal').classList.add('hidden');
+        // Restore background scrolling
+        document.body.classList.remove('overflow-hidden');
+    }, 300);
 }
 
 document.getElementById('quick-view-modal')?.addEventListener('click', (e) => {

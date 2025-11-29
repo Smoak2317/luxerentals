@@ -67,8 +67,8 @@
             <p class="text-gray-600 max-w-2xl mx-auto font-light text-sm md:text-lg">Curated designer wear for your most memorable occasions.</p>
         </div>
 
-        <!-- Filters (Fixed/Sticky) -->
-        <div class="sticky top-20 md:top-24 z-30 bg-white/95 backdrop-blur-sm p-4 md:p-6 rounded-2xl shadow-lg shadow-pink-100/50 border border-stone-100 mb-8 md:mb-12 transition-all">
+        <!-- Filters (Removed Sticky, Removed Price) -->
+        <div class="bg-white/95 backdrop-blur-sm p-4 md:p-6 rounded-2xl shadow-lg shadow-pink-100/50 border border-stone-100 mb-8 md:mb-12 transition-all">
             <div class="flex flex-col lg:flex-row gap-6 justify-between items-center">
                 <!-- Search -->
                 <div class="relative w-full lg:w-1/3">
@@ -93,13 +93,6 @@
                     <button class="category-btn px-6 py-2.5 rounded-full text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95" data-category="Anarkali">Anarkali</button>
                     
                     <button class="category-btn px-6 py-2.5 rounded-full text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95" data-category="Dress">Dress</button>
-                </div>
-
-                <!-- Price Filter -->
-                <div class="flex items-center gap-3 w-full lg:w-auto bg-stone-50 px-4 py-2 rounded-full border border-stone-100">
-                    <span class="text-xs text-gray-500 font-bold uppercase">Max:</span>
-                    <span id="price-value" class="text-sm font-bold text-brand-700 w-12">₹5000</span>
-                    <input type="range" id="price-range" min="1000" max="5000" step="500" value="5000" class="w-full lg:w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-500 hover:accent-brand-600">
                 </div>
             </div>
         </div>
@@ -165,7 +158,7 @@
     </footer>
 
     <!-- Quick View Modal included in both pages for reusability logic -->
-    <div id="quick-view-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div id="quick-view-modal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
@@ -189,8 +182,8 @@
         </div>
     </div>
 
-    <!-- Rental Inquiry Modal -->
-    <div id="rent-modal" class="fixed inset-0 z-[70] hidden" role="dialog" aria-modal="true">
+    <!-- Rental Inquiry Modal (High Z-Index) -->
+    <div id="rent-modal" class="fixed inset-0 z-[110] hidden" role="dialog" aria-modal="true">
         <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity opacity-0" id="rent-modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
