@@ -67,7 +67,7 @@
             <p class="text-gray-600 max-w-2xl mx-auto font-light text-sm md:text-lg">Curated designer wear for your most memorable occasions.</p>
         </div>
 
-        <!-- Filters (Removed Sticky, Removed Price) -->
+        <!-- Filters (Normal flow, removed sticky) -->
         <div class="bg-white/95 backdrop-blur-sm p-4 md:p-6 rounded-2xl shadow-lg shadow-pink-100/50 border border-stone-100 mb-8 md:mb-12 transition-all">
             <div class="flex flex-col lg:flex-row gap-6 justify-between items-center">
                 <!-- Search -->
@@ -94,6 +94,8 @@
                     
                     <button class="category-btn px-6 py-2.5 rounded-full text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95" data-category="Dress">Dress</button>
                 </div>
+
+                <!-- Price Filter Removed -->
             </div>
         </div>
 
@@ -182,8 +184,8 @@
         </div>
     </div>
 
-    <!-- Rental Inquiry Modal (High Z-Index) -->
-    <div id="rent-modal" class="fixed inset-0 z-[110] hidden" role="dialog" aria-modal="true">
+    <!-- Rental Inquiry Modal -->
+    <div id="rent-modal" class="fixed inset-0 z-[100] hidden" role="dialog" aria-modal="true">
         <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity opacity-0" id="rent-modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">

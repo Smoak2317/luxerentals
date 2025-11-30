@@ -133,13 +133,18 @@ async function initCatalog() {
     const products = await fetchProducts();
     const searchInput = document.getElementById('search');
     const categoryBtns = document.querySelectorAll('.category-btn');
+    
+    // Removed Price Slider Logic
+    // const priceRange = document.getElementById('price-range');
+    // const priceValue = document.getElementById('price-value');
 
-    let state = { category: 'All', search: '' };
+    let state = { category: 'All', search: '' }; // Removed maxPrice
 
     function render() {
         const filtered = products.filter(p => {
             return (state.category === 'All' || p.category === state.category) &&
                    (p.name.toLowerCase().includes(state.search.toLowerCase()));
+                   // Removed price check
         });
 
         if (filtered.length === 0) {
@@ -237,6 +242,9 @@ function openRentModal(product) {
     if (!product) return;
     currentRentProduct = product;
 
+    // Lock Scroll
+    document.body.classList.add('overflow-hidden');
+
     // Fill Product Summary
     const summary = document.getElementById('rent-product-summary');
     if (summary) {
@@ -254,8 +262,6 @@ function openRentModal(product) {
     const modal = document.getElementById('rent-modal');
     if (modal) {
         modal.classList.remove('hidden');
-        // Prevent background scrolling
-        document.body.classList.add('overflow-hidden');
         setTimeout(() => {
             document.getElementById('rent-modal-backdrop').classList.remove('opacity-0');
             document.getElementById('rent-modal-panel').classList.remove('opacity-0', 'scale-95');
@@ -264,15 +270,14 @@ function openRentModal(product) {
 }
 
 function closeRentModal() {
+    // Unlock Scroll
+    document.body.classList.remove('overflow-hidden');
+
     const modal = document.getElementById('rent-modal');
     if (modal) {
         document.getElementById('rent-modal-backdrop').classList.add('opacity-0');
         document.getElementById('rent-modal-panel').classList.add('opacity-0', 'scale-95');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-            // Restore background scrolling
-            document.body.classList.remove('overflow-hidden');
-        }, 300);
+        setTimeout(() => modal.classList.add('hidden'), 300);
     }
 }
 
@@ -340,6 +345,9 @@ function openQuickView(event, productId) {
     event.preventDefault();
     event.stopPropagation();
 
+    // Lock Scroll
+    document.body.classList.add('overflow-hidden');
+
     const product = globalProducts.find(p => p.id === productId);
     if (!product) return;
 
@@ -382,8 +390,6 @@ function openQuickView(event, productId) {
     // Show Modal
     const modal = document.getElementById('quick-view-modal');
     modal.classList.remove('hidden');
-    // Prevent background scrolling
-    document.body.classList.add('overflow-hidden');
     setTimeout(() => {
         document.getElementById('modal-backdrop').classList.remove('opacity-0');
         document.getElementById('modal-panel').classList.remove('opacity-0', 'scale-95');
@@ -391,15 +397,14 @@ function openQuickView(event, productId) {
 }
 
 function closeQuickView() {
+    // Unlock Scroll
+    document.body.classList.remove('overflow-hidden');
+
     const backdrop = document.getElementById('modal-backdrop');
     const panel = document.getElementById('modal-panel');
     backdrop.classList.add('opacity-0');
     panel.classList.add('opacity-0', 'scale-95');
-    setTimeout(() => {
-        document.getElementById('quick-view-modal').classList.add('hidden');
-        // Restore background scrolling
-        document.body.classList.remove('overflow-hidden');
-    }, 300);
+    setTimeout(() => document.getElementById('quick-view-modal').classList.add('hidden'), 300);
 }
 
 document.getElementById('quick-view-modal')?.addEventListener('click', (e) => {

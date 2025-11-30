@@ -1,1 +1,1 @@
-// File removed.
+// This file is no longer used. Please see index.html and script.js for the static site implementation.
