@@ -6,123 +6,193 @@
     <title>Admin Panel | Luxe Rentals</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: { 
+                50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8',
+                300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899', 
+                600: '#db2777', 700: '#be185d', 800: '#9d174d', 900: '#831843'
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+            }
+          }
+        }
+      }
+    </script>
 </head>
-<body class="bg-gray-100 font-sans text-gray-900 antialiased">
+<body class="bg-stone-50 font-sans text-gray-900 antialiased">
 
-    <div id="admin-login" class="fixed inset-0 z-50 bg-stone-900 flex items-center justify-center">
-        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Admin Login</h2>
-            <form id="admin-login-form" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="admin-password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 p-3 border" placeholder="Enter admin password">
+    <!-- Login Page -->
+    <div id="admin-login" class="fixed inset-0 z-50 bg-gradient-to-br from-brand-50 via-white to-purple-50 flex items-center justify-center">
+        <div class="bg-white/80 backdrop-blur-lg p-8 md:p-10 rounded-2xl shadow-2xl w-full max-w-md border border-white/50 relative overflow-hidden">
+            <!-- Decorative blobs -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
+
+            <div class="relative z-10 text-center">
+                <h1 class="text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-purple-600 mb-2">Luxe Rentals</h1>
+                <p class="text-gray-500 mb-8 font-medium uppercase tracking-wider text-xs">Admin Dashboard</p>
+                
+                <form id="admin-login-form" class="space-y-5 text-left">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Access Key</label>
+                        <input type="password" id="admin-password" class="block w-full rounded-xl border-gray-300 bg-white/50 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border outline-none transition-all focus:bg-white" placeholder="Enter password">
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-brand-600 to-purple-600 text-white py-3.5 rounded-xl font-bold hover:shadow-lg hover:shadow-brand-500/30 hover:scale-[1.02] transition-all duration-200">
+                        Login to Dashboard
+                    </button>
+                </form>
+
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <a href="index.html" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-brand-600 transition-colors font-medium">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Home
+                    </a>
                 </div>
-                <button type="submit" class="w-full bg-pink-600 text-white py-3 rounded-lg font-bold hover:bg-pink-700 transition">Login</button>
-            </form>
+            </div>
         </div>
     </div>
 
+    <!-- Dashboard Layout -->
     <div id="admin-panel" class="hidden min-h-screen flex flex-col md:flex-row">
-        <aside class="w-full md:w-64 bg-stone-900 text-stone-300 flex-shrink-0">
-            <div class="p-6 border-b border-stone-800">
-                <h1 class="text-2xl font-serif font-bold text-white">Luxe Rentals <span class="text-pink-500 text-xs block uppercase tracking-wider">Admin</span></h1>
+        
+        <!-- Sidebar -->
+        <aside class="w-full md:w-72 bg-white border-r border-stone-100 flex-shrink-0 flex flex-col h-screen sticky top-0">
+            <div class="p-8 border-b border-stone-50">
+                <h1 class="text-2xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-purple-600">Luxe Rentals</h1>
+                <span class="text-xs font-bold text-stone-400 uppercase tracking-widest">Control Panel</span>
             </div>
-            <nav class="p-4 space-y-2">
-                <button onclick="switchTab('dashboard')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800 text-left transition active-tab bg-stone-800 text-white" id="tab-dashboard">
-                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+            
+            <nav class="p-4 space-y-2 flex-grow">
+                <button onclick="switchTab('dashboard')" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-left transition-all font-medium text-sm group" id="tab-dashboard">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity"></i> Dashboard
                 </button>
-                <button onclick="switchTab('products')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800 text-left transition" id="tab-products">
-                    <i data-lucide="shopping-bag" class="w-5 h-5"></i> Products
+                <button onclick="switchTab('products')" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-left transition-all font-medium text-sm group" id="tab-products">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity"></i> Products Catalog
                 </button>
-                <button onclick="switchTab('inquiries')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800 text-left transition" id="tab-inquiries">
-                    <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp Inquiries
-                </button>
-                <button onclick="logoutAdmin()" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-900/50 text-red-400 text-left transition mt-8">
-                    <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+                <button onclick="switchTab('inquiries')" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-left transition-all font-medium text-sm group" id="tab-inquiries">
+                    <i data-lucide="message-circle" class="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity"></i> WhatsApp Inquiries
                 </button>
             </nav>
+
+            <div class="p-4 border-t border-stone-50">
+                <button onclick="logoutAdmin()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 text-red-500 hover:text-red-700 text-left transition font-medium text-sm">
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Sign Out
+                </button>
+            </div>
         </aside>
 
-        <main class="flex-grow p-6 md:p-8 overflow-y-auto">
+        <!-- Main Content -->
+        <main class="flex-grow p-6 md:p-10 overflow-y-auto bg-stone-50/50">
+            
             <!-- Dashboard View -->
-            <div id="view-dashboard" class="space-y-6">
-                <h2 class="text-2xl font-bold mb-6">Overview</h2>
+            <div id="view-dashboard" class="space-y-8 animate-fade-in-up">
+                <header>
+                    <h2 class="text-3xl font-serif font-bold text-gray-900">Dashboard Overview</h2>
+                    <p class="text-gray-500">Welcome back, Admin.</p>
+                </header>
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 hover:shadow-md transition-shadow">
                         <div class="flex justify-between items-start">
-                            <div><p class="text-sm text-gray-500 mb-1">Total Products</p><h3 class="text-3xl font-bold" id="dash-total-products">0</h3></div>
-                            <div class="p-3 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="package" class="w-6 h-6"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Total Inventory</p>
+                                <h3 class="text-4xl font-bold text-gray-900" id="dash-total-products">0</h3>
+                            </div>
+                            <div class="p-3 bg-brand-50 text-brand-600 rounded-xl"><i data-lucide="package" class="w-6 h-6"></i></div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 hover:shadow-md transition-shadow">
                         <div class="flex justify-between items-start">
-                            <div><p class="text-sm text-gray-500 mb-1">Total Inquiries</p><h3 class="text-3xl font-bold" id="dash-total-inquiries">0</h3></div>
-                            <div class="p-3 bg-green-50 text-green-600 rounded-lg"><i data-lucide="message-circle" class="w-6 h-6"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Total Inquiries</p>
+                                <h3 class="text-4xl font-bold text-gray-900" id="dash-total-inquiries">0</h3>
+                            </div>
+                            <div class="p-3 bg-green-50 text-green-600 rounded-xl"><i data-lucide="message-circle" class="w-6 h-6"></i></div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 p-6 rounded-xl mt-8">
-                    <h3 class="text-lg font-bold text-purple-900 mb-2">How to update your site</h3>
-                    <ol class="list-decimal list-inside text-purple-800 text-sm space-y-2">
-                        <li>Go to the <strong>Products</strong> tab to Add or Edit items.</li>
-                        <li>Use the drag & drop zone to change images.</li>
-                        <li>Click the <strong>"Save Changes to JSON"</strong> button.</li>
-                        <li>Copy the generated code and paste it into your <code>products.json</code> file.</li>
-                    </ol>
+
+                <div class="bg-gradient-to-br from-white to-brand-50 border border-brand-100 p-8 rounded-2xl shadow-sm">
+                    <h3 class="text-lg font-bold text-brand-900 mb-4 flex items-center gap-2">
+                        <i data-lucide="zap" class="w-5 h-5"></i> Quick Guide: Updating Your Site
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-6 text-sm text-gray-600">
+                        <div class="bg-white p-4 rounded-xl border border-brand-100/50">
+                            <span class="font-bold text-brand-600 block mb-1">1. Modify Data</span>
+                            Go to the <strong>Products</strong> tab. You can Add new items using Image URLs or Edit existing details like price and availability.
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-brand-100/50">
+                            <span class="font-bold text-brand-600 block mb-1">2. Save Changes</span>
+                            Click <strong>"Save Changes to JSON"</strong>. Copy the code and paste it into your local <code>products.json</code> file to make it live.
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Products View -->
-            <div id="view-products" class="hidden space-y-6">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-                    <h2 class="text-2xl font-bold">Product Management</h2>
+            <div id="view-products" class="hidden space-y-6 animate-fade-in-up">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-2">
+                    <div>
+                        <h2 class="text-3xl font-serif font-bold text-gray-900">Product Catalog</h2>
+                        <p class="text-gray-500 text-sm">Manage your inventory and availability.</p>
+                    </div>
                     <div class="flex gap-3">
-                        <button onclick="exportJSON()" class="bg-stone-800 text-white px-4 py-2 rounded-lg font-medium hover:bg-stone-700 flex items-center gap-2 shadow-sm">
-                            <i data-lucide="save" class="w-4 h-4"></i> Save Changes to JSON
+                        <button onclick="exportJSON()" class="bg-stone-800 text-white px-5 py-2.5 rounded-full font-medium hover:bg-stone-900 flex items-center gap-2 shadow-lg shadow-stone-200 transition-all hover:-translate-y-0.5">
+                            <i data-lucide="code" class="w-4 h-4"></i> Save Changes to JSON
                         </button>
-                        <button onclick="openAddModal()" class="bg-pink-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-pink-700 flex items-center gap-2 shadow-sm shadow-pink-200">
-                            <i data-lucide="plus" class="w-4 h-4"></i> Add Product
+                        <button onclick="openAddModal()" class="bg-gradient-to-r from-brand-500 to-purple-600 text-white px-5 py-2.5 rounded-full font-medium hover:shadow-lg hover:shadow-pink-500/30 flex items-center gap-2 transition-all hover:-translate-y-0.5">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Add New Product
                         </button>
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
-                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                            <thead class="bg-gray-50/50 text-gray-400 text-xs uppercase tracking-wider font-semibold">
                                 <tr>
-                                    <th class="p-4 border-b">Product</th>
-                                    <th class="p-4 border-b">Category</th>
-                                    <th class="p-4 border-b">Price</th>
-                                    <th class="p-4 border-b">Availability</th>
-                                    <th class="p-4 border-b text-right">Actions</th>
+                                    <th class="p-5 border-b border-gray-100">Item</th>
+                                    <th class="p-5 border-b border-gray-100">Category</th>
+                                    <th class="p-5 border-b border-gray-100">Price</th>
+                                    <th class="p-5 border-b border-gray-100">Status</th>
+                                    <th class="p-5 border-b border-gray-100 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="admin-product-list" class="divide-y divide-gray-100 text-sm"></tbody>
+                            <tbody id="admin-product-list" class="divide-y divide-gray-50 text-sm"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
             <!-- Inquiries View -->
-             <div id="view-inquiries" class="hidden space-y-6">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-                    <h2 class="text-2xl font-bold">WhatsApp Inquiries Data</h2>
-                    <button onclick="clearInquiries()" class="text-red-500 hover:text-red-700 text-sm font-medium">Clear History</button>
+             <div id="view-inquiries" class="hidden space-y-6 animate-fade-in-up">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-2">
+                    <div>
+                        <h2 class="text-3xl font-serif font-bold text-gray-900">Inquiry History</h2>
+                        <p class="text-gray-500 text-sm">Track customers who clicked "Rent via WhatsApp".</p>
+                    </div>
+                    <button onclick="clearInquiries()" class="text-red-500 hover:text-red-700 text-sm font-medium border border-red-100 hover:bg-red-50 px-4 py-2 rounded-full transition-colors">Clear History</button>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
-                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                            <thead class="bg-gray-50/50 text-gray-400 text-xs uppercase tracking-wider font-semibold">
                                 <tr>
-                                    <th class="p-4 border-b">Date</th>
-                                    <th class="p-4 border-b">Customer</th>
-                                    <th class="p-4 border-b">Mobile</th>
-                                    <th class="p-4 border-b">Product</th>
-                                    <th class="p-4 border-b">Requested Date</th>
+                                    <th class="p-5 border-b border-gray-100">Date</th>
+                                    <th class="p-5 border-b border-gray-100">Customer</th>
+                                    <th class="p-5 border-b border-gray-100">Mobile</th>
+                                    <th class="p-5 border-b border-gray-100">Product Interest</th>
+                                    <th class="p-5 border-b border-gray-100">Requested Date</th>
                                 </tr>
                             </thead>
-                            <tbody id="admin-inquiry-list" class="divide-y divide-gray-100 text-sm"></tbody>
+                            <tbody id="admin-inquiry-list" class="divide-y divide-gray-50 text-sm"></tbody>
                         </table>
                     </div>
                 </div>
@@ -131,23 +201,29 @@
     </div>
 
     <!-- Add/Edit Product Modal -->
-    <div id="add-modal" class="hidden fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-xl">
-                <h3 class="text-xl font-bold text-gray-800" id="modal-title">Add New Product</h3>
-                <button onclick="closeAddModal()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
+    <div id="add-modal" class="hidden fixed inset-0 z-[60] bg-stone-900/60 flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all scale-100">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 rounded-t-2xl">
+                <h3 class="text-xl font-serif font-bold text-gray-800" id="modal-title">Add New Product</h3>
+                <button onclick="closeAddModal()" class="text-gray-400 hover:text-gray-600 bg-white rounded-full p-1 hover:bg-gray-100 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <div class="p-6 space-y-4">
+            
+            <div class="p-8 space-y-6">
                 <input type="hidden" id="edit-mode-id">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Product ID</label><input type="text" id="new-id" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="e.g. CH009"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Name</label><input type="text" id="new-name" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="Product Name"></div>
-                    
-                    <!-- Updated Category Select -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Category</label>
-                        <select id="new-category" class="w-full border border-gray-300 rounded-lg p-2 outline-none focus:ring-2 focus:ring-pink-500">
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Product ID</label>
+                        <input type="text" id="new-id" class="w-full border border-gray-200 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition bg-gray-50/50 focus:bg-white" placeholder="e.g. CH009">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Name</label>
+                        <input type="text" id="new-name" class="w-full border border-gray-200 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition bg-gray-50/50 focus:bg-white" placeholder="Product Name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Category</label>
+                        <select id="new-category" class="w-full border border-gray-200 rounded-xl p-3 outline-none focus:ring-2 focus:ring-brand-500 bg-gray-50/50 focus:bg-white">
                             <option value="Saree">Saree</option>
                             <option value="Lehenga">Lehenga</option>
                             <option value="Bridal">Bridal</option>
@@ -157,10 +233,9 @@
                         </select>
                     </div>
 
-                    <!-- Updated Size Select -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Size</label>
-                        <select id="new-size" class="w-full border border-gray-300 rounded-lg p-2 outline-none focus:ring-2 focus:ring-pink-500">
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Size</label>
+                        <select id="new-size" class="w-full border border-gray-200 rounded-xl p-3 outline-none focus:ring-2 focus:ring-brand-500 bg-gray-50/50 focus:bg-white">
                             <option value="M">M</option>
                             <option value="L">L</option>
                             <option value="XL">XL</option>
@@ -169,55 +244,52 @@
                         </select>
                     </div>
 
-                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Rent Price (₹)</label><input type="number" id="new-price" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Original Price (₹)</label><input type="number" id="new-original" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none"></div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Rent Price (₹)</label>
+                        <input type="number" id="new-price" class="w-full border border-gray-200 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 outline-none bg-gray-50/50 focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Original Price (₹)</label>
+                        <input type="number" id="new-original" class="w-full border border-gray-200 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 outline-none bg-gray-50/50 focus:bg-white">
+                    </div>
                 </div>
 
-                <!-- Drag and Drop Image -->
+                <!-- Simple Image URL Input -->
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Product Image</label>
-                    <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-50 hover:border-pink-400 transition">
-                        <i data-lucide="image-plus" class="w-8 h-8 text-gray-400 mb-2"></i>
-                        <p class="text-sm text-gray-600">Drag & Drop or <span class="text-pink-600 font-bold">Click to Upload</span></p>
-                        <p class="text-xs text-gray-400 mt-1">Supports JPG, PNG</p>
-                        <input type="file" id="file-input" class="hidden" accept="image/*">
-                    </div>
-                    <!-- Preview -->
-                    <div id="image-preview-container" class="hidden mt-3 flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-100">
-                        <img id="image-preview" src="" class="w-12 h-12 rounded object-cover">
-                        <div class="flex-grow">
-                            <p class="text-xs text-green-600 font-bold">Image Selected</p>
-                            <input type="text" id="new-image" class="w-full bg-transparent text-xs text-gray-500 border-none p-0 focus:ring-0" placeholder="Image URL or Base64 data..." readonly>
-                        </div>
-                        <button onclick="clearImage()" class="text-gray-400 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
-                    </div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Image URL</label>
+                    <input type="text" id="new-image" class="w-full border border-gray-200 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 outline-none bg-gray-50/50 focus:bg-white font-mono text-sm" placeholder="https://example.com/image.jpg">
+                    <p class="text-[10px] text-gray-400 mt-1">Paste a direct link to the image (e.g., from Google Drive or Unsplash).</p>
                 </div>
 
-                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Description</label><textarea id="new-desc" class="w-full border border-gray-300 rounded-lg p-2 h-20 focus:ring-2 focus:ring-pink-500 outline-none" placeholder="Product description..."></textarea></div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Description</label>
+                    <textarea id="new-desc" class="w-full border border-gray-200 rounded-xl p-3 h-24 focus:ring-2 focus:ring-brand-500 outline-none bg-gray-50/50 focus:bg-white resize-none" placeholder="Product details..."></textarea>
+                </div>
             </div>
-            <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-xl">
-                <button onclick="closeAddModal()" class="px-5 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">Cancel</button>
-                <button onclick="saveProduct()" id="save-btn" class="px-5 py-2 bg-pink-600 text-white font-bold rounded-lg hover:bg-pink-700 shadow-md">Add Product</button>
+            
+            <div class="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3 rounded-b-2xl">
+                <button onclick="closeAddModal()" class="px-6 py-2.5 text-gray-500 font-bold hover:bg-gray-100 rounded-xl transition-colors">Cancel</button>
+                <button onclick="saveProduct()" id="save-btn" class="px-8 py-2.5 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 shadow-lg shadow-brand-200 transition-all transform hover:-translate-y-0.5">Add Product</button>
             </div>
         </div>
     </div>
 
     <!-- Export JSON Modal -->
-    <div id="export-modal" class="hidden fixed inset-0 z-[70] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[90vh]">
-            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-stone-900 text-white rounded-t-xl">
+    <div id="export-modal" class="hidden fixed inset-0 z-[70] bg-stone-900/80 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[85vh] overflow-hidden">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-900 text-white">
                 <div>
-                    <h3 class="text-lg font-bold">Update products.json</h3>
-                    <p class="text-xs text-stone-400">Copy the code below and paste it into your file.</p>
+                    <h3 class="text-lg font-bold">Generated JSON</h3>
+                    <p class="text-xs text-gray-400">Replace content in products.json</p>
                 </div>
-                <button onclick="closeExportModal()" class="text-white/70 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+                <button onclick="closeExportModal()" class="text-white/60 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
-            <div class="p-0 flex-grow relative bg-slate-900">
-                <textarea id="json-export-output" class="w-full h-[50vh] bg-slate-900 text-green-400 font-mono text-xs p-4 outline-none resize-none" readonly></textarea>
-                <button onclick="copyToClipboard()" class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded text-xs border border-white/20 backdrop-blur">Copy to Clipboard</button>
+            <div class="flex-grow relative bg-[#1e1e1e]">
+                <textarea id="json-export-output" class="w-full h-full bg-[#1e1e1e] text-[#a9b7c6] font-mono text-xs p-6 outline-none resize-none leading-relaxed" readonly></textarea>
+                <button onclick="copyToClipboard()" class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-xs border border-white/10 backdrop-blur font-medium transition-colors">Copy Code</button>
             </div>
-            <div class="p-5 border-t border-gray-200 bg-gray-50 flex justify-end rounded-b-xl">
-                <button onclick="closeExportModal()" class="px-6 py-2 bg-stone-800 text-white font-bold rounded-lg hover:bg-stone-900">Done</button>
+            <div class="p-5 border-t border-gray-200 bg-gray-50 flex justify-end">
+                <button onclick="closeExportModal()" class="px-6 py-2.5 bg-gray-900 text-white font-bold rounded-lg hover:bg-black transition-colors">Done</button>
             </div>
         </div>
     </div>

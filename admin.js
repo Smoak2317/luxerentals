@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showPanel();
         initAdminData();
     }
-    setupDragAndDrop();
 });
 
 // Login Handler
@@ -16,13 +15,13 @@ document.getElementById('admin-login-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const password = document.getElementById('admin-password').value;
     
-    // Simple client-side check for demo
-    if (password === 'admin123') {
+    // Updated Password
+    if (password === 'Smoakluxe.@56964') {
         sessionStorage.setItem('admin_auth', 'true');
         showPanel();
         initAdminData();
     } else {
-        alert('Incorrect password');
+        alert('Incorrect Access Key');
     }
 });
 
@@ -36,16 +35,27 @@ function logoutAdmin() {
     window.location.reload();
 }
 
+// Styling for active tabs (updated for new theme)
 function switchTab(tabName) {
     document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
     document.getElementById(`view-${tabName}`).classList.remove('hidden');
     
+    const activeClasses = ['bg-gradient-to-r', 'from-brand-500', 'to-purple-600', 'text-white', 'shadow-lg', 'shadow-pink-500/20'];
+    const inactiveClasses = ['text-gray-600', 'hover:bg-brand-50', 'hover:text-brand-600'];
+
     document.querySelectorAll('aside nav button').forEach(btn => {
-        btn.classList.remove('bg-stone-800', 'text-white');
-        btn.classList.add('text-stone-300');
+        btn.classList.remove(...activeClasses);
+        btn.classList.add(...inactiveClasses);
+        // Reset icons
+        const icon = btn.querySelector('i');
+        if(icon) icon.classList.add('opacity-70');
     });
-    document.getElementById(`tab-${tabName}`).classList.add('bg-stone-800', 'text-white');
-    document.getElementById(`tab-${tabName}`).classList.remove('text-stone-300');
+
+    const activeBtn = document.getElementById(`tab-${tabName}`);
+    activeBtn.classList.remove(...inactiveClasses);
+    activeBtn.classList.add(...activeClasses);
+    const activeIcon = activeBtn.querySelector('i');
+    if(activeIcon) activeIcon.classList.remove('opacity-70');
 
     if (tabName === 'products') renderProductTable();
     if (tabName === 'inquiries') renderInquiriesTable();
@@ -59,7 +69,9 @@ async function initAdminData() {
         if (res.ok) {
             adminProducts = await res.json();
             document.getElementById('dash-total-products').textContent = adminProducts.length;
-            renderProductTable();
+            
+            // Auto-load dashboard state
+            switchTab('dashboard');
         }
 
         // Load Inquiries from LocalStorage
@@ -81,31 +93,33 @@ function renderProductTable() {
     
     adminProducts.forEach(p => {
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-50 transition border-b border-gray-100";
+        tr.className = "hover:bg-brand-50/30 transition group";
         tr.innerHTML = `
-            <td class="p-4">
-                <div class="flex items-center gap-3">
-                    <img src="${p.image}" class="w-10 h-10 rounded object-cover bg-gray-200 border border-gray-200">
+            <td class="p-5">
+                <div class="flex items-center gap-4">
+                    <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover bg-gray-100 border border-gray-200 shadow-sm" onerror="this.src='https://via.placeholder.com/100?text=No+Img'">
                     <div>
-                        <div class="font-bold text-gray-900 text-sm">${p.name}</div>
-                        <div class="text-xs text-gray-400 font-mono">ID: ${p.id}</div>
+                        <div class="font-bold text-gray-900 text-sm group-hover:text-brand-700 transition-colors">${p.name}</div>
+                        <div class="text-xs text-gray-400 font-mono mt-0.5">ID: ${p.id}</div>
                     </div>
                 </div>
             </td>
-            <td class="p-4 text-gray-600 text-sm">${p.category}</td>
-            <td class="p-4 font-medium text-sm">₹${p.price}</td>
-            <td class="p-4">
-                <button onclick="toggleAvailability('${p.id}')" class="px-3 py-1 text-xs font-bold rounded-full transition-colors ${p.available ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'}">
+            <td class="p-5 text-gray-600 text-sm font-medium">${p.category}</td>
+            <td class="p-5 font-bold text-sm text-gray-900">₹${p.price.toLocaleString()}</td>
+            <td class="p-5">
+                <button onclick="toggleAvailability('${p.id}')" class="px-3 py-1 text-[10px] uppercase tracking-wider font-bold rounded-full transition-all border ${p.available ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100' : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'}">
                     ${p.available ? 'Available' : 'Booked'}
                 </button>
             </td>
-            <td class="p-4 text-right flex justify-end gap-2">
-                <button onclick="editProduct('${p.id}')" class="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded transition">
-                     <i data-lucide="edit" class="w-4 h-4"></i>
-                </button>
-                <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded transition">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
+            <td class="p-5 text-right">
+                <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onclick="editProduct('${p.id}')" class="text-brand-600 hover:bg-brand-50 p-2 rounded-lg transition" title="Edit">
+                         <i data-lucide="edit-2" class="w-4 h-4"></i>
+                    </button>
+                    <button onclick="deleteProduct('${p.id}')" class="text-red-400 hover:bg-red-50 p-2 rounded-lg transition" title="Delete">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
             </td>
         `;
         tbody.appendChild(tr);
@@ -119,19 +133,19 @@ function renderInquiriesTable() {
     tbody.innerHTML = '';
 
     if (adminInquiries.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-gray-400">No inquiries tracked yet.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-gray-400 italic">No inquiries tracked yet.</td></tr>';
         return;
     }
 
     adminInquiries.forEach(inq => {
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-50 transition border-b border-gray-100";
+        tr.className = "hover:bg-brand-50/30 transition border-b border-gray-50";
         tr.innerHTML = `
-            <td class="p-4 text-sm text-gray-600">${inq.date}</td>
-            <td class="p-4 font-bold text-gray-900">${inq.customerName}</td>
-            <td class="p-4 text-sm text-gray-600 font-mono">${inq.mobile}</td>
-            <td class="p-4 text-sm text-pink-600 font-medium">${inq.productName} <span class="text-xs text-gray-400">(${inq.productId})</span></td>
-             <td class="p-4 text-sm text-gray-600">${inq.requestedDate || '-'}</td>
+            <td class="p-5 text-sm text-gray-500">${inq.date}</td>
+            <td class="p-5 font-bold text-gray-900">${inq.customerName}</td>
+            <td class="p-5 text-sm text-gray-600 font-mono">${inq.mobile}</td>
+            <td class="p-5 text-sm text-brand-600 font-medium">${inq.productName} <span class="text-xs text-gray-400 ml-1">(${inq.productId})</span></td>
+             <td class="p-5 text-sm text-gray-600 font-medium">${inq.requestedDate || '-'}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -170,7 +184,7 @@ function openAddModal() {
     document.getElementById('new-original').value = "";
     document.getElementById('new-size').value = "";
     document.getElementById('new-desc').value = "";
-    clearImage(); // Reset image input
+    document.getElementById('new-image').value = ""; // Clear Image URL Input
 
     document.getElementById('add-modal').classList.remove('hidden');
 }
@@ -193,11 +207,8 @@ function editProduct(id) {
     document.getElementById('new-size').value = product.size;
     document.getElementById('new-desc').value = product.description;
     
-    // Set Image Preview
+    // Set Image URL
     document.getElementById('new-image').value = product.image;
-    document.getElementById('image-preview').src = product.image;
-    document.getElementById('drop-zone').classList.add('hidden');
-    document.getElementById('image-preview-container').classList.remove('hidden');
 
     document.getElementById('add-modal').classList.remove('hidden');
 }
@@ -211,6 +222,8 @@ function saveProduct() {
     const editId = document.getElementById('edit-mode-id').value;
     const isEdit = !!editId;
 
+    const imageUrl = document.getElementById('new-image').value.trim();
+
     const data = {
         id: document.getElementById('new-id').value || `CH${Math.floor(Math.random() * 1000)}`,
         name: document.getElementById('new-name').value,
@@ -218,7 +231,7 @@ function saveProduct() {
         price: Number(document.getElementById('new-price').value) || 0,
         originalPrice: Number(document.getElementById('new-original').value) || 0,
         description: document.getElementById('new-desc').value,
-        image: document.getElementById('new-image').value || 'https://via.placeholder.com/400',
+        image: imageUrl || 'https://via.placeholder.com/400',
         available: true, // Default to true if new
         size: document.getElementById('new-size').value
     };
@@ -241,7 +254,7 @@ function saveProduct() {
 
     closeAddModal();
     renderProductTable();
-    alert(isEdit ? "Product updated!" : "Product added!");
+    // alert(isEdit ? "Product updated!" : "Product added!"); // Optional feedback
 }
 
 function deleteProduct(id) {
@@ -249,64 +262,6 @@ function deleteProduct(id) {
         adminProducts = adminProducts.filter(p => p.id !== id);
         renderProductTable();
     }
-}
-
-// --- Drag and Drop Image Logic ---
-
-function setupDragAndDrop() {
-    const dropZone = document.getElementById('drop-zone');
-    const fileInput = document.getElementById('file-input');
-
-    dropZone.addEventListener('click', () => fileInput.click());
-
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('border-pink-500', 'bg-pink-50');
-    });
-
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('border-pink-500', 'bg-pink-50');
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('border-pink-500', 'bg-pink-50');
-        if (e.dataTransfer.files.length) {
-            handleFile(e.dataTransfer.files[0]);
-        }
-    });
-
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-            handleFile(e.target.files[0]);
-        }
-    });
-}
-
-function handleFile(file) {
-    if (!file.type.startsWith('image/')) {
-        alert("Please select an image file.");
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const base64Data = e.target.result;
-        document.getElementById('new-image').value = base64Data;
-        document.getElementById('image-preview').src = base64Data;
-        
-        // Show Preview, Hide Drop Zone
-        document.getElementById('drop-zone').classList.add('hidden');
-        document.getElementById('image-preview-container').classList.remove('hidden');
-    };
-    reader.readAsDataURL(file);
-}
-
-function clearImage() {
-    document.getElementById('new-image').value = "";
-    document.getElementById('file-input').value = ""; // Reset file input
-    document.getElementById('drop-zone').classList.remove('hidden');
-    document.getElementById('image-preview-container').classList.add('hidden');
 }
 
 // --- Export / Save ---
