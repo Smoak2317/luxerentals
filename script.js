@@ -109,14 +109,55 @@ function createProductCard(product, index = 0) {
 // --- Page Initializers ---
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Mobile Menu Toggle
+    // Mobile Menu Toggle with Animation and Icons
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     
+    // SVG Paths
+    const iconMenu = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />`;
+    const iconClose = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />`;
+
     if (mobileBtn && mobileMenu) {
-        mobileBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+        // Toggle Menu Function
+        const toggleMenu = () => {
+            const isHidden = mobileMenu.classList.contains('hidden');
+            const svg = mobileBtn.querySelector('svg');
+            
+            if (isHidden) {
+                // Open
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('mobile-menu-enter');
+                if(svg) svg.innerHTML = iconClose;
+                mobileBtn.classList.add('text-brand-600');
+            } else {
+                // Close
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('mobile-menu-enter');
+                if(svg) svg.innerHTML = iconMenu;
+                mobileBtn.classList.remove('text-brand-600');
+            }
+        };
+
+        // Close Menu Function (for scroll)
+        const closeMenu = () => {
+             if (!mobileMenu.classList.contains('hidden')) {
+                const svg = mobileBtn.querySelector('svg');
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('mobile-menu-enter');
+                if(svg) svg.innerHTML = iconMenu;
+                mobileBtn.classList.remove('text-brand-600');
+             }
+        };
+
+        mobileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
         });
+
+        // Close on Scroll
+        window.addEventListener('scroll', () => {
+            closeMenu();
+        }, { passive: true });
     }
 
     // Robust Page Routing based on Element Existence
