@@ -29,29 +29,29 @@
 <script type="importmap">
 {
   "imports": {
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6"
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
   }
 }
 </script>
 </head>
-<body class="bg-stone-50 text-stone-800 antialiased flex flex-col min-h-screen selection:bg-brand-100 selection:text-brand-900">
+<body class="bg-brand-50/30 text-stone-800 antialiased flex flex-col min-h-screen">
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-stone-100 transition-all duration-300">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+    <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-pink-100 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 md:h-20">
                 <a href="index.html" class="flex items-center gap-2 group">
-                    <span class="text-2xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-purple-600 tracking-tight">Luxe Rentals</span>
+                    <span class="text-2xl md:text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-purple-600 tracking-tight">Luxe Rentals</span>
                 </a>
                 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8 items-center">
                     <a href="index.html" class="text-sm font-medium text-brand-600">Home</a>
                     <a href="products.html" class="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors">Collection</a>
-                    <a href="products.html" class="bg-stone-900 text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-brand-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">Rent Now</a>
+                    <a href="products.html" class="bg-gradient-to-r from-brand-500 to-purple-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-pink-500/30 transition-all transform hover:scale-105 duration-200">Rent Now</a>
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -64,111 +64,114 @@
         </div>
 
         <!-- Mobile Menu Panel -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-16 shadow-xl z-50">
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-16 shadow-lg z-50">
             <div class="px-4 pt-4 pb-6 space-y-2">
-                <a href="index.html" class="block px-3 py-2 rounded-lg text-sm font-bold text-brand-600 bg-pink-50">Home</a>
-                <a href="products.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-brand-600 hover:bg-gray-50">Collection</a>
-                <a href="products.html" class="block px-3 py-3 mt-4 text-center rounded-lg text-sm font-bold text-white bg-brand-600 shadow-md">Rent Now</a>
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-bold text-brand-600 bg-pink-50">Home</a>
+                <a href="products.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-gray-50">Collection</a>
+                <a href="products.html" class="block px-3 py-2 mt-4 text-center rounded-md text-base font-bold text-white bg-brand-600 shadow-md">Rent Now</a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content Wrapper -->
-    <main class="flex-grow">
-        
-        <!-- Clean Hero Section -->
-        <section class="relative overflow-hidden bg-white">
-            <div class="absolute inset-0 bg-gradient-to-b from-purple-50/50 to-white opacity-60"></div>
+    <!-- Clean Hero Section -->
+    <section class="relative bg-white overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-50 via-white to-purple-50 opacity-70"></div>
+        <div class="absolute -top-20 -right-20 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float"></div>
+        <div class="absolute top-40 -left-20 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float delay-200"></div>
+
+        <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 md:pt-20 md:pb-24 flex flex-col md:flex-row items-center gap-8 md:gap-12">
             
-            <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 flex flex-col md:flex-row items-center gap-10">
-                
-                <div class="flex-1 text-center md:text-left z-10 order-2 md:order-1">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 mb-5 rounded-full bg-stone-50 border border-stone-200 shadow-sm">
-                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-                        <span class="text-gray-600 font-bold text-[10px] uppercase tracking-widest">New Season</span>
-                    </div>
-                    
-                    <h1 class="text-4xl md:text-5xl font-serif font-bold leading-tight mb-4 text-gray-900">
-                        Luxury Within <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-purple-600 italic pr-2">Reach</span>
-                    </h1>
-                    <p class="text-sm md:text-base text-gray-500 mb-8 max-w-md mx-auto md:mx-0 leading-relaxed font-light">
-                        Elevate your style with our exclusive collection of designer lehengas and gowns. Premium fashion, rented intelligently.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                        <a href="products.html" class="px-8 py-3 bg-stone-900 text-white font-bold rounded-full shadow-lg hover:bg-brand-600 transition-all transform hover:-translate-y-1 text-sm tracking-wide">
-                            View Collection
-                        </a>
-                    </div>
+            <div class="flex-1 text-center md:text-left z-10 order-2 md:order-1">
+                <div class="inline-block px-3 py-1 mb-4 rounded-full bg-pink-100 border border-pink-200">
+                    <span class="text-brand-700 font-bold text-[10px] md:text-xs uppercase tracking-wider">New Season Arrivals</span>
                 </div>
-
-                <div class="flex-1 relative w-full max-w-xs md:max-w-sm order-1 md:order-2 perspective-1000">
-                    <div class="relative rounded-2xl overflow-hidden shadow-2xl rotate-1 hover:rotate-0 transition-all duration-700 aspect-[3/4] bg-stone-100 ring-1 ring-stone-900/5">
-                        <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=1000&auto=format&fit=crop" 
-                             alt="Bridal Wear" 
-                             class="w-full h-full object-cover" />
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Featured Collection -->
-        <section class="py-16 md:py-20 bg-stone-50 border-t border-stone-100">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-10">
-                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-gray-900 mb-2">Curated Favorites</h2>
-                    <p class="text-gray-500 text-sm">Handpicked styles for the season</p>
-                </div>
-                
-                <div id="featured-products" class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                    <!-- JS Loads Content Here -->
-                </div>
-                
-                <div class="text-center mt-12">
-                    <a href="products.html" class="inline-flex items-center gap-2 text-brand-700 font-bold border-b border-brand-200 hover:border-brand-600 transition-all pb-0.5 text-xs uppercase tracking-widest hover:text-brand-900">
-                        View Entire Catalog
+                <!-- Scaled down H1 -->
+                <h1 class="text-3xl md:text-6xl font-serif font-bold leading-tight mb-4">
+                    Luxury Within <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-purple-600">Reach</span>
+                </h1>
+                <p class="text-sm md:text-base text-gray-600 mb-6 md:mb-8 max-w-lg mx-auto md:mx-0 leading-relaxed">
+                    Elevate your style with our exclusive collection of designer lehengas and gowns. Rent premium fashion for your special moments.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+                    <a href="products.html" class="px-6 py-3 bg-brand-600 text-white font-bold rounded-full shadow-lg shadow-pink-500/30 hover:bg-brand-700 hover:shadow-pink-500/50 transition-all transform hover:-translate-y-1 hover-lift text-sm md:text-base">
+                        Explore Collection
                     </a>
                 </div>
             </div>
-        </section>
 
-    </main>
+            <div class="flex-1 relative w-full max-w-xs md:max-w-md order-1 md:order-2">
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-all duration-700 aspect-[3/4] bg-stone-100">
+                    <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Bridal Wear" 
+                         class="w-full h-full object-cover" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Collection -->
+    <section class="py-12 md:py-16 bg-white/50 backdrop-blur-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10 md:mb-12">
+                <h2 class="text-2xl md:text-3xl font-serif font-bold text-gray-900 mb-3">Curated Favorites</h2>
+                <div class="w-16 h-1 bg-gradient-to-r from-brand-400 to-purple-400 mx-auto rounded-full"></div>
+            </div>
+            
+            <div id="featured-products" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
+                <!-- JS Loads Content Here -->
+            </div>
+            
+            <div class="text-center mt-10 md:mt-12">
+                <a href="products.html" class="inline-flex items-center gap-2 text-brand-700 font-bold border-b-2 border-pink-200 hover:border-brand-600 transition-all pb-1 text-sm">
+                    View Entire Catalog <span>&rarr;</span>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-stone-900 text-stone-300 mt-auto border-t border-stone-800 relative overflow-hidden text-sm">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+    <footer class="bg-stone-900 text-stone-300 mt-auto border-t border-pink-900/20 relative overflow-hidden text-sm">
+        <!-- Decorative background elements -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-500 via-purple-500 to-brand-500"></div>
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-pink-900/10 rounded-full blur-3xl"></div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 
+                <!-- Brand -->
                 <div class="space-y-4">
-                    <h3 class="text-xl font-serif font-bold text-white tracking-wide">Luxe Rentals</h3>
-                    <p class="text-stone-500 text-xs leading-relaxed max-w-xs">
-                        Redefining elegance with premium ethnic wear rentals. Sustainable luxury for every occasion.
+                    <h3 class="text-2xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400">Luxe Rentals</h3>
+                    <p class="text-stone-400 text-xs leading-relaxed max-w-xs">
+                        Redefining elegance with premium ethnic wear rentals.
                     </p>
                 </div>
 
+                <!-- Links -->
                 <div>
-                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-[10px] text-stone-500">Navigation</h4>
-                    <ul class="space-y-2 text-xs font-medium text-stone-400">
-                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
-                        <li><a href="products.html" class="hover:text-white transition-colors">Collection</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">How it works</a></li>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">Explore</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="index.html" class="hover:text-brand-400 transition-colors flex items-center gap-2">Home</a></li>
+                        <li><a href="products.html" class="hover:text-brand-400 transition-colors flex items-center gap-2">Collection</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors flex items-center gap-2">How it Works</a></li>
                     </ul>
                 </div>
 
+                <!-- Social & Contact -->
                 <div>
-                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-[10px] text-stone-500">Social</h4>
-                    <div class="flex gap-3">
-                        <a href="https://instagram.com" target="_blank" class="w-8 h-8 rounded-full bg-stone-800 flex items-center justify-center hover:bg-gradient-to-tr hover:from-yellow-500 hover:via-purple-500 hover:to-pink-500 hover:text-white transition-all">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-xs">Connect With Us</h4>
+                    <div class="flex gap-4 mb-6">
+                        <a href="https://instagram.com" target="_blank" class="w-8 h-8 rounded-full bg-stone-800 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1 group">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                         </a>
-                        <a href="https://twitter.com" target="_blank" class="w-8 h-8 rounded-full bg-stone-800 flex items-center justify-center hover:bg-blue-400 hover:text-white transition-all">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+                        <a href="https://twitter.com" target="_blank" class="w-8 h-8 rounded-full bg-stone-800 flex items-center justify-center hover:bg-blue-400 hover:text-white transition-all transform hover:-translate-y-1 group">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <div class="border-t border-stone-800 mt-10 pt-6 text-[10px] text-stone-600 flex justify-between uppercase tracking-wider">
+            <div class="border-t border-stone-800 mt-10 pt-6 text-xs text-stone-600 flex justify-between">
                 <p>&copy; 2024 Luxe Rentals.</p>
                 <div class="flex gap-4">
                     <a href="#" class="hover:text-stone-400">Privacy</a>
@@ -178,39 +181,39 @@
         </div>
     </footer>
 
-    <!-- Quick View Modal -->
+    <!-- Quick View Modal (Simplified) -->
     <div id="quick-view-modal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="absolute inset-0 bg-stone-900/40 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
+        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-2xl ring-1 ring-black/5 transition-all sm:my-8 sm:w-full sm:max-w-2xl opacity-0 scale-95" id="modal-panel">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-3xl opacity-0 scale-95" id="modal-panel">
                     
-                    <button type="button" onclick="closeQuickView()" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 z-20 bg-white/50 backdrop-blur rounded-full p-2 hover:bg-white transition-colors">
+                    <button type="button" onclick="closeQuickView()" class="absolute right-4 top-4 text-gray-400 hover:text-gray-600 z-20 bg-white/80 rounded-full p-2 hover:bg-white transition-colors">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
 
                     <div class="grid grid-cols-1 md:grid-cols-2">
-                        <div class="relative h-64 md:h-96 bg-stone-50">
+                        <div class="relative h-64 md:h-80 bg-stone-50">
                             <img id="qv-image" src="" alt="Product" class="absolute inset-0 h-full w-full object-cover object-top">
                         </div>
 
                         <div class="p-6 md:p-8 flex flex-col h-full justify-center">
                             <div class="mb-2">
-                                <span id="qv-category" class="text-[9px] font-bold uppercase tracking-widest text-brand-600 bg-brand-50 border border-brand-100 px-2 py-0.5 rounded"></span>
+                                <span id="qv-category" class="text-[10px] font-bold uppercase tracking-widest text-brand-600 bg-pink-50 px-2 py-1 rounded"></span>
                             </div>
-                            <h3 id="qv-name" class="text-xl font-serif font-bold text-gray-900 mb-2 leading-tight"></h3>
-                            <p id="qv-desc" class="text-gray-500 mb-6 text-xs leading-relaxed line-clamp-4"></p>
+                            <h3 id="qv-name" class="text-xl md:text-2xl font-serif font-bold text-gray-900 mb-3 leading-tight"></h3>
+                            <p id="qv-desc" class="text-gray-600 mb-5 text-sm leading-relaxed line-clamp-3"></p>
                             
-                            <div class="flex items-baseline gap-2 mb-6 border-t border-gray-50 pt-4">
+                            <div class="flex items-baseline gap-3 mb-6">
                                 <span id="qv-price" class="text-2xl font-bold text-gray-900"></span>
-                                <span class="text-[10px] text-gray-400 uppercase font-medium">per day</span>
+                                <span class="text-xs text-gray-500">per day</span>
                             </div>
 
                             <div class="space-y-2 mt-auto">
-                                <button id="qv-whatsapp-btn" class="w-full rounded-lg bg-stone-900 px-4 py-3 text-sm font-bold text-white shadow-lg hover:bg-brand-600 transition-all hover:-translate-y-0.5">
+                                <button id="qv-whatsapp-btn" class="w-full rounded-full bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg hover:shadow-xl hover:from-green-600 hover:to-emerald-700 transition-all hover-lift">
                                     Rent via WhatsApp
                                 </button>
-                                <button id="qv-detail-link" class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm font-bold text-stone-600 hover:bg-stone-50 transition-colors">
+                                <button id="qv-detail-link" class="w-full rounded-full border border-gray-200 bg-white px-6 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-600 transition-colors">
                                     View Full Details
                                 </button>
                             </div>
@@ -221,37 +224,35 @@
         </div>
     </div>
 
-    <!-- Rental Inquiry Modal -->
+    <!-- Rental Inquiry Modal (Same as other pages) -->
     <div id="rent-modal" class="fixed inset-0 z-[100] hidden" role="dialog" aria-modal="true">
         <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity opacity-0" id="rent-modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
                 <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-2xl transition-all sm:my-8 w-full max-w-sm opacity-0 scale-95" id="rent-modal-panel">
-                    <div class="bg-stone-900 p-4 text-white flex justify-between items-center">
-                        <div>
-                            <h3 class="text-base font-bold">Rental Inquiry</h3>
-                            <p class="text-[10px] text-stone-400">One step away from your outfit</p>
-                        </div>
-                        <button type="button" onclick="closeRentModal()" class="text-white/60 hover:text-white">
+                    <div class="bg-gradient-to-r from-brand-600 to-purple-600 p-4 text-white">
+                        <h3 class="text-lg font-bold font-serif">Rental Inquiry</h3>
+                        <p class="text-xs opacity-90">Please provide your details to proceed.</p>
+                        <button type="button" onclick="closeRentModal()" class="absolute right-4 top-4 text-white/80 hover:text-white">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
                     <div class="p-5 space-y-3">
-                        <div id="rent-product-summary" class="flex items-center gap-3 p-3 bg-stone-50 rounded-lg border border-stone-100"></div>
+                        <div id="rent-product-summary" class="flex items-center gap-3 p-2 bg-stone-50 rounded-lg border border-stone-100"></div>
                         <div>
-                            <label class="block text-[10px] font-bold text-stone-500 uppercase mb-1">Your Name</label>
-                            <input type="text" id="rent-name" class="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-stone-900 focus:border-stone-900 outline-none transition bg-white" placeholder="Name">
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Your Name</label>
+                            <input type="text" id="rent-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="e.g. Anjali Sharma">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-stone-500 uppercase mb-1">Mobile</label>
-                            <input type="tel" id="rent-mobile" class="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-stone-900 focus:border-stone-900 outline-none transition bg-white" placeholder="Mobile Number">
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Mobile Number</label>
+                            <input type="tel" id="rent-mobile" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="e.g. 9876543210">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-stone-500 uppercase mb-1">Rental Date</label>
-                            <input type="date" id="rent-date" class="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-stone-900 focus:border-stone-900 outline-none transition bg-white text-stone-600">
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Rental Date</label>
+                            <input type="date" id="rent-date" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none transition">
                         </div>
-                        <button id="confirm-rent-btn" onclick="confirmRent()" class="w-full bg-gradient-to-r from-green-600 to-green-700 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg hover:from-green-500 hover:to-green-600 transition-all text-sm flex justify-center items-center gap-2 mt-2">
-                            <span>Open WhatsApp</span>
+                        <button id="confirm-rent-btn" onclick="confirmRent()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-2.5 rounded-lg shadow-lg hover:shadow-xl hover:from-green-600 hover:to-emerald-700 transition-all hover-lift flex justify-center items-center gap-2 text-sm">
+                            <span>Continue to WhatsApp</span>
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                         </button>
                     </div>
