@@ -57,6 +57,8 @@ async function fetchProducts() {
 function createProductCard(product, index = 0) {
     const isAboveFold = index < 4;
     const loadingAttr = isAboveFold ? 'eager' : 'lazy';
+    // Support new images array or fallback
+    const mainImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
     
     // Status Badge (Top Right)
     const statusBadge = product.available 
@@ -82,7 +84,7 @@ function createProductCard(product, index = 0) {
                     <img 
                         loading="${loadingAttr}" 
                         decoding="async"
-                        src="${product.image}" 
+                        src="${mainImage}" 
                         alt="${product.name}" 
                         class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700"
                     >
@@ -244,7 +246,7 @@ async function initCatalog() {
     render();
 }
 
-// 3. Detail Page
+// 3. Detail Page - Updated for Gallery
 async function initDetail() {
     if(!document.getElementById('product-detail')) return;
 
@@ -265,7 +267,49 @@ async function initDetail() {
     }
 
     document.title = `${product.name} | Luxe Rentals`;
-    document.getElementById('main-image').src = product.image;
+    
+    // --- Image Gallery Logic ---
+    const images = product.images && product.images.length > 0 ? product.images : [product.image];
+    const mainImgEl = document.getElementById('main-image');
+    mainImgEl.src = images[0];
+    
+    // Render Thumbnails
+    const thumbsContainer = document.getElementById('thumbnails-container');
+    if (thumbsContainer) {
+        if (images.length > 1) {
+            thumbsContainer.innerHTML = images.map((img, idx) => `
+                <div class="aspect-square rounded-lg bg-stone-100 overflow-hidden cursor-pointer border-2 ${idx === 0 ? 'border-brand-500 ring-1 ring-brand-200' : 'border-transparent'} hover:border-brand-300 transition-all" onclick="changeMainImage('${img}', this)">
+                    <img src="${img}" class="w-full h-full object-cover" alt="Detail ${idx + 1}">
+                </div>
+            `).join('');
+            thumbsContainer.classList.remove('hidden');
+        } else {
+            thumbsContainer.innerHTML = ''; // Clear if only 1 image
+            thumbsContainer.classList.add('hidden');
+        }
+    }
+    
+    // Global function for onclick in template string
+    window.changeMainImage = (src, thumbEl) => {
+        // Update Main Image
+        const main = document.getElementById('main-image');
+        main.style.opacity = '0.5';
+        setTimeout(() => {
+            main.src = src;
+            main.style.opacity = '1';
+        }, 150);
+        
+        // Update Active Thumbnail styling
+        const allThumbs = document.getElementById('thumbnails-container').children;
+        for (let t of allThumbs) {
+            t.classList.remove('border-brand-500', 'ring-1', 'ring-brand-200');
+            t.classList.add('border-transparent');
+        }
+        thumbEl.classList.remove('border-transparent');
+        thumbEl.classList.add('border-brand-500', 'ring-1', 'ring-brand-200');
+    };
+
+    // --- Info Population ---
     document.getElementById('product-category').textContent = product.category;
     document.getElementById('product-name').textContent = product.name;
     document.getElementById('product-desc').textContent = product.description;
@@ -322,11 +366,13 @@ function openRentModal(product) {
     
     document.body.style.overflow = 'hidden';
 
+    const mainImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
+
     // Set Summary
     const summary = document.getElementById('rent-product-summary');
     if (summary) {
         summary.innerHTML = `
-            <img src="${product.image}" class="w-12 h-12 rounded object-cover object-top border border-stone-200">
+            <img src="${mainImage}" class="w-12 h-12 rounded object-cover object-top border border-stone-200">
             <div>
                 <div class="text-[10px] font-bold text-brand-600 uppercase">${product.category}</div>
                 <div class="font-bold text-gray-900 leading-tight line-clamp-1 text-sm">${product.name}</div>
@@ -471,7 +517,10 @@ function openQuickView(event, productId) {
     
     document.body.style.overflow = 'hidden';
 
-    document.getElementById('qv-image').src = product.image;
+    // Image logic
+    const mainImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
+    document.getElementById('qv-image').src = mainImage;
+    
     document.getElementById('qv-name').textContent = product.name;
     document.getElementById('qv-category').textContent = product.category;
     document.getElementById('qv-desc').textContent = product.description;
