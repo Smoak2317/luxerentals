@@ -1,4 +1,5 @@
 
+
 // Configuration
 const WHATSAPP_NUMBER = "7201800959";
 const PRODUCTS_URL = 'products.json';
@@ -211,7 +212,8 @@ async function initDetail() {
     
     if (!id) {
         console.warn("Product Details: No ID parameter found in URL.");
-        document.getElementById('product-detail').innerHTML = '<div class="text-center py-20 text-gray-500">No product selected. <a href="products.html" class="text-brand-600 underline">Browse Collection</a></div>';
+        // Hide loader, show error
+        document.getElementById('detail-loading').innerHTML = '<div class="text-center py-20 text-gray-500">No product selected. <a href="products.html" class="text-brand-600 underline">Browse Collection</a></div>';
         return;
     }
 
@@ -220,7 +222,7 @@ async function initDetail() {
     
     if (!product) {
         console.warn(`Product Details: Product with ID ${id} not found.`);
-        document.getElementById('product-detail').innerHTML = '<div class="text-center py-20 text-gray-500">Product not found. <a href="products.html" class="text-brand-600 underline">Browse Collection</a></div>';
+        document.getElementById('detail-loading').innerHTML = '<div class="text-center py-20 text-gray-500">Product not found. <a href="products.html" class="text-brand-600 underline">Browse Collection</a></div>';
         return;
     }
 
@@ -270,6 +272,15 @@ async function initDetail() {
             .slice(0, 4);
         // Pass a high index (10) to force lazy loading for footer items
         similarContainer.innerHTML = similar.map(p => createProductCard(p, 10)).join('');
+    }
+
+    // Reveal Content and Hide Loader
+    document.getElementById('detail-loading').classList.add('hidden');
+    document.getElementById('detail-content').classList.remove('hidden');
+    const backLink = document.getElementById('detail-back-link');
+    if(backLink) {
+        backLink.classList.remove('hidden');
+        backLink.classList.add('inline-flex');
     }
 }
 
