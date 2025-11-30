@@ -60,7 +60,8 @@
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-12 flex-grow" id="product-detail">
+    <!-- Changed max-w-7xl to max-w-5xl for a more compact view on desktop -->
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-12 flex-grow" id="product-detail">
         <!-- Initial Loading State (Added ID) -->
         <div id="detail-loading" class="flex flex-col items-center justify-center min-h-[50vh] animate-pulse">
             <div class="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mb-4"></div>
@@ -73,7 +74,8 @@
         </a>
 
         <!-- Main Content Container: Optimized grid cols for Tablet (md) and Desktop (lg) -->
-        <div id="detail-content" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 mb-12 md:mb-20 animate-fade-in-up">
+        <!-- Reduced gap on large screens to match narrower container -->
+        <div id="detail-content" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 lg:gap-12 mb-12 md:mb-20 animate-fade-in-up">
             <!-- Left: Image -->
             <div class="space-y-4">
                 <div class="rounded-2xl overflow-hidden shadow-2xl aspect-[3/4] bg-stone-50 relative group">
@@ -85,16 +87,16 @@
             </div>
 
             <!-- Right: Info -->
-            <div class="flex flex-col h-full py-1 md:py-4">
+            <div class="flex flex-col h-full py-1 md:py-2">
                 <div class="mb-3 md:mb-4">
                     <span id="product-category" class="px-3 py-1 md:px-4 md:py-1.5 bg-brand-50 text-brand-700 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest border border-brand-100"></span>
                 </div>
 
-                <h1 id="product-name" class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-3 md:mb-6 leading-tight"></h1>
+                <h1 id="product-name" class="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-serif font-bold text-gray-900 mb-3 md:mb-6 leading-tight"></h1>
                 
                 <div class="flex flex-wrap items-end gap-3 md:gap-6 mb-6 md:mb-8 pb-4 md:pb-8 border-b border-gray-100">
-                    <p id="product-price" class="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 tracking-tight"></p>
-                    <div class="mb-1 md:mb-2">
+                    <p id="product-price" class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight"></p>
+                    <div class="mb-1 md:mb-1.5">
                         <p id="product-mrp" class="text-xs md:text-sm text-gray-400 line-through"></p>
                         <p class="text-xs md:text-sm text-green-600 font-bold uppercase tracking-wide">Premium Rental</p>
                     </div>
