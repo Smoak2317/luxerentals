@@ -59,9 +59,9 @@ function createProductCard(product, index = 0) {
     return `
         <div class="group relative block h-full">
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col h-full hover-lift">
-                <!-- Image Container: object-contain with NO padding -->
-                <div class="relative aspect-[3/4] bg-stone-50 cursor-pointer overflow-hidden" onclick="window.location.href='detail.html?id=${product.id}'">
-                    <img loading="${loadingAttr}" src="${product.image}" alt="${product.name}" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-700">
+                <!-- Image Container: Changed to object-cover object-top to fill space -->
+                <div class="relative aspect-[3/4] bg-stone-100 cursor-pointer overflow-hidden" onclick="window.location.href='detail.html?id=${product.id}'">
+                    <img loading="${loadingAttr}" src="${product.image}" alt="${product.name}" class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
                     ${statusBadge}
                     
@@ -120,7 +120,7 @@ async function initHome() {
     
     const products = await fetchProducts();
     const featured = products.slice(0, 3); // Top 3
-    container.innerHTML = featured.map(createProductCard).join('');
+    container.innerHTML = featured.map((p, i) => createProductCard(p, i)).join('');
 }
 
 // 2. Catalog Page
@@ -134,24 +134,19 @@ async function initCatalog() {
     const searchInput = document.getElementById('search');
     const categoryBtns = document.querySelectorAll('.category-btn');
     
-    // Removed Price Slider Logic
-    // const priceRange = document.getElementById('price-range');
-    // const priceValue = document.getElementById('price-value');
-
-    let state = { category: 'All', search: '' }; // Removed maxPrice
+    let state = { category: 'All', search: '' }; 
 
     function render() {
         const filtered = products.filter(p => {
             return (state.category === 'All' || p.category === state.category) &&
                    (p.name.toLowerCase().includes(state.search.toLowerCase()));
-                   // Removed price check
         });
 
         if (filtered.length === 0) {
             container.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400">No matching items found.</div>';
         } else {
             // .map auto-passes index to createProductCard
-            container.innerHTML = filtered.map(createProductCard).join('');
+            container.innerHTML = filtered.map((p, i) => createProductCard(p, i)).join('');
         }
     }
 
@@ -245,11 +240,11 @@ function openRentModal(product) {
     // Lock Scroll
     document.body.classList.add('overflow-hidden');
 
-    // Fill Product Summary
+    // Fill Product Summary - Ensure image covers nicely
     const summary = document.getElementById('rent-product-summary');
     if (summary) {
         summary.innerHTML = `
-            <img src="${product.image}" class="w-16 h-16 rounded object-cover border border-stone-200">
+            <img src="${product.image}" class="w-16 h-16 rounded object-cover object-top border border-stone-200">
             <div>
                 <div class="text-xs font-bold text-brand-600 uppercase">${product.category}</div>
                 <div class="font-bold text-gray-900 leading-tight line-clamp-1">${product.name}</div>
@@ -352,6 +347,7 @@ function openQuickView(event, productId) {
     if (!product) return;
 
     // Populate
+    // Use object-contain here to show full product details for inspection
     document.getElementById('qv-image').src = product.image;
     document.getElementById('qv-name').textContent = product.name;
     document.getElementById('qv-category').textContent = product.category;
@@ -366,11 +362,8 @@ function openQuickView(event, productId) {
     waBtn.className = "w-full rounded-full bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-3 text-base font-bold text-white shadow-lg hover:shadow-xl hover:from-green-600 hover:to-emerald-700 transition-all hover-lift";
 
     if (product.available) {
-        // Change logic: Open Modal instead of direct link
         waBtn.onclick = (e) => {
             e.preventDefault();
-            // Close Quick View first if needed, or just open Rent Modal on top (z-index handles it)
-            // But let's close QV to be clean or keep it open. Rent modal z-index is 70, QV is 60.
             openRentModal(product);
         };
         waBtn.innerHTML = 'Rent via WhatsApp';
