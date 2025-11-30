@@ -59,13 +59,13 @@ function createProductCard(product, index = 0) {
     return `
         <div class="group relative block h-full">
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col h-full hover-lift">
-                <!-- Image Container: object-contain to show full product without cropping -->
-                <div class="relative aspect-[3/4] bg-white cursor-pointer overflow-hidden" onclick="window.location.href='detail.html?id=${product.id}'">
-                    <img loading="${loadingAttr}" src="${product.image}" alt="${product.name}" class="w-full h-full object-contain p-1 transform group-hover:scale-105 transition-transform duration-700">
+                <!-- Image Container: object-cover object-top to fill space without blank areas, prioritizing faces/tops -->
+                <div class="relative aspect-[3/4] bg-stone-100 cursor-pointer overflow-hidden" onclick="window.location.href='detail.html?id=${product.id}'">
+                    <img loading="${loadingAttr}" src="${product.image}" alt="${product.name}" class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
                     ${statusBadge}
                     
-                    <!-- Quick View Button (Hidden on mobile usually, distinct on desktop) -->
+                    <!-- Quick View Button -->
                     <button onclick="openQuickView(event, '${product.id}')" class="hidden md:block absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white text-brand-600 font-bold px-5 py-2 rounded-full shadow-lg hover:bg-brand-50 z-20 text-xs whitespace-nowrap border border-pink-100">
                         Quick View
                     </button>
