@@ -401,23 +401,26 @@ function confirmRent() {
     localStorage.setItem('luxe_inquiries', JSON.stringify(existingInquiries));
     // ---------------------
 
-    // Construct detailed message
-    const productLink = window.location.origin + window.location.pathname.replace('index.html', '').replace('products.html', '') + `detail.html?id=${currentRentProduct.id}`;
+    // Robust link generation: Uses current URL as base to resolve 'detail.html' correctly
+    // Works for http://site.com/sub/products.html -> http://site.com/sub/detail.html?id=...
+    const productLink = new URL(`detail.html?id=${currentRentProduct.id}`, window.location.href).href;
     
+    // Beautifully formatted WhatsApp message with emojis
     const message = 
-`*New Rental Inquiry*
----------------------
-*Product:* ${currentRentProduct.name}
-*ID:* ${currentRentProduct.id}
-*Price:* ₹${currentRentProduct.price.toLocaleString()}/day
-*Link:* ${productLink}
+`👋 *Hello, I'm interested in renting this outfit!*
 
-*Customer Details*
-*Name:* ${name}
-*Mobile:* ${mobile}
-*Requested Date:* ${date}
+👗 *OUTFIT DETAILS*
+• *Name:* ${currentRentProduct.name}
+• *Code:* ${currentRentProduct.id}
+• *Rent:* ₹${currentRentProduct.price.toLocaleString()} / day
+🔗 *View Item:* ${productLink}
 
-Is this available?`;
+👤 *MY DETAILS*
+• *Name:* ${name}
+• *Mobile:* ${mobile}
+📅 *Event Date:* ${date}
+
+✨ *Please confirm if it is available for this date.*`;
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     

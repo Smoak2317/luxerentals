@@ -1,3 +1,4 @@
+
 // Admin Logic
 let adminProducts = []; // Holds the state of products in the admin panel
 let adminInquiries = [];
@@ -97,9 +98,14 @@ function renderProductTable() {
         tr.innerHTML = `
             <td class="p-5">
                 <div class="flex items-center gap-4">
-                    <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover bg-gray-100 border border-gray-200 shadow-sm" onerror="this.src='https://via.placeholder.com/100?text=No+Img'">
+                    <a href="detail.html?id=${p.id}" target="_blank" class="relative group/img cursor-pointer" title="View on Live Site">
+                        <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover bg-gray-100 border border-gray-200 shadow-sm group-hover/img:ring-2 ring-brand-400 transition-all" onerror="this.src='https://via.placeholder.com/100?text=No+Img'">
+                        <div class="absolute inset-0 bg-black/0 group-hover/img:bg-black/10 rounded-lg transition-colors flex items-center justify-center">
+                             <i data-lucide="external-link" class="w-4 h-4 text-white opacity-0 group-hover/img:opacity-100 transition-opacity drop-shadow-md"></i>
+                        </div>
+                    </a>
                     <div>
-                        <div class="font-bold text-gray-900 text-sm group-hover:text-brand-700 transition-colors">${p.name}</div>
+                        <a href="detail.html?id=${p.id}" target="_blank" class="font-bold text-gray-900 text-sm group-hover:text-brand-700 transition-colors hover:underline block">${p.name}</a>
                         <div class="text-xs text-gray-400 font-mono mt-0.5">ID: ${p.id}</div>
                     </div>
                 </div>
