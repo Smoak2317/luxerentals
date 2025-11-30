@@ -373,9 +373,30 @@ function confirmRent() {
         return;
     }
 
+    // 1. Mobile Number Validation: Exactly 10 digits
+    const mobileRegex = /^\d{10}$/;
+    if (!mobileRegex.test(mobile)) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+    }
+
+    // 2. Duration Validation: 1 to 10 days
     const duration = parseInt(days);
     if (isNaN(duration) || duration < 1) {
         alert("Duration must be at least 1 day.");
+        return;
+    }
+    if (duration > 10) {
+        alert("Maximum rental duration is 10 days.");
+        return;
+    }
+
+    // 3. Date Validation: Not in the past
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0,0,0,0); // normalize today to midnight
+    if (selectedDate < today) {
+        alert("Please select a valid future date.");
         return;
     }
 
