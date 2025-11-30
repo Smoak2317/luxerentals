@@ -43,7 +43,7 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden text-gray-600 hover:text-brand-600 focus:outline-none">
+                <button id="mobile-menu-btn" class="md:hidden text-gray-600 hover:text-brand-600 focus:outline-none p-2">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -54,51 +54,51 @@
         <!-- Mobile Menu Panel -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full left-0 top-20 shadow-lg z-50">
             <div class="px-4 pt-4 pb-6 space-y-2">
-                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-gray-50">Home</a>
-                <a href="products.html" class="block px-3 py-2 rounded-md text-base font-bold text-brand-600 bg-pink-50">Collection</a>
-                <a href="products.html" class="block px-3 py-2 mt-4 text-center rounded-md text-base font-bold text-white bg-brand-600 shadow-md">Rent Now</a>
+                <a href="index.html" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-gray-50">Home</a>
+                <a href="products.html" class="block px-3 py-3 rounded-md text-base font-bold text-brand-600 bg-pink-50">Collection</a>
+                <a href="products.html" class="block px-3 py-3 mt-4 text-center rounded-md text-base font-bold text-white bg-brand-600 shadow-md">Rent Now</a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Container: reduced px for mobile (px-2) to give more width to grid -->
-    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 md:py-10">
-        <div class="text-center mb-6 md:mb-12">
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-10">
+        <div class="text-center mb-5 md:mb-12">
             <h1 class="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-2 md:mb-4">Our Collection</h1>
             <p class="text-gray-600 max-w-2xl mx-auto font-light text-sm md:text-lg">Curated designer wear for your most memorable occasions.</p>
         </div>
 
-        <!-- Filters (Scroll naturally) -->
-        <div class="bg-white/95 backdrop-blur-sm p-4 md:p-6 rounded-2xl shadow-lg shadow-pink-100/50 border border-stone-100 mb-6 md:mb-12 transition-all mx-1 md:mx-0">
-            <div class="flex flex-col lg:flex-row gap-4 md:gap-6 justify-between items-center">
-                <!-- Search -->
+        <!-- Filters Section -->
+        <div class="bg-white/95 backdrop-blur-sm p-3 md:p-6 rounded-2xl shadow-lg shadow-pink-100/50 border border-stone-100 mb-6 md:mb-12 transition-all w-full">
+            <div class="flex flex-col lg:flex-row gap-3 md:gap-6 justify-between items-center">
+                <!-- Search: text-base on mobile prevents iOS zoom, md:text-sm for desktop -->
                 <div class="relative w-full lg:w-1/3">
-                    <input type="text" id="search" placeholder="Search for styles, colors..." class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-full focus:ring-2 focus:ring-brand-400 outline-none bg-gray-50 focus:bg-white transition-all text-sm shadow-sm">
+                    <input type="text" id="search" placeholder="Search styles..." class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-full focus:ring-2 focus:ring-brand-400 outline-none bg-gray-50 focus:bg-white transition-all text-base md:text-sm shadow-sm">
                     <svg class="absolute left-3.5 top-3.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
                 
-                <!-- Categories -->
-                <div class="flex gap-2 md:gap-3 overflow-x-auto w-full lg:w-auto pb-2 lg:pb-0 no-scrollbar items-center">
-                    <button class="category-btn px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold bg-gradient-to-r from-brand-500 to-purple-600 text-white shadow-md shadow-pink-500/30 transition-all whitespace-nowrap border border-transparent hover:scale-105 active:scale-95 flex-shrink-0" data-category="All">All</button>
+                <!-- Categories: Horizontal scroll -->
+                <div class="flex gap-2 overflow-x-auto w-full lg:w-auto pb-1 lg:pb-0 no-scrollbar items-center mask-image-scroll">
+                    <button class="category-btn px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold bg-gradient-to-r from-brand-500 to-purple-600 text-white shadow-md shadow-pink-500/30 transition-all whitespace-nowrap border border-transparent hover:scale-105 active:scale-95 flex-shrink-0" data-category="All">All</button>
                     
-                    <button class="category-btn px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Lehenga">Lehenga</button>
+                    <button class="category-btn px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Lehenga">Lehenga</button>
                     
-                    <button class="category-btn px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Saree">Saree</button>
+                    <button class="category-btn px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Saree">Saree</button>
                     
-                    <button class="category-btn px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Bridal">Bridal</button>
+                    <button class="category-btn px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Bridal">Bridal</button>
                     
-                    <button class="category-btn px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Gown">Gown</button>
+                    <button class="category-btn px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Gown">Gown</button>
                     
-                    <button class="category-btn px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Anarkali">Anarkali</button>
+                    <button class="category-btn px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Anarkali">Anarkali</button>
                     
-                    <button class="category-btn px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Dress">Dress</button>
+                    <button class="category-btn px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium bg-white border border-stone-200 text-stone-600 hover:border-brand-300 hover:text-brand-600 hover:bg-pink-50 hover:shadow-md transition-all whitespace-nowrap active:scale-95 flex-shrink-0" data-category="Dress">Dress</button>
                 </div>
             </div>
         </div>
 
-        <!-- Products Grid: 2 columns on mobile with slightly larger gap (gap-3) for better separation -->
+        <!-- Products Grid: gap-3 is a sweet spot for mobile 2-column layout -->
         <div id="products-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 lg:gap-8">
             <!-- Items injected by JS -->
         </div>
@@ -110,21 +110,21 @@
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-500 via-purple-500 to-brand-500"></div>
         <div class="absolute -top-24 -right-24 w-64 h-64 bg-pink-900/10 rounded-full blur-3xl"></div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                 
                 <!-- Brand -->
-                <div class="space-y-4">
+                <div class="space-y-4 text-center md:text-left">
                     <h3 class="text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400">Luxe Rentals</h3>
-                    <p class="text-stone-400 text-sm leading-relaxed max-w-xs">
+                    <p class="text-stone-400 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
                         Redefining elegance with premium ethnic wear rentals. Shine on your special day without the commitment.
                     </p>
                 </div>
 
                 <!-- Links -->
-                <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-wider text-sm">Explore</h4>
-                    <ul class="space-y-3 text-sm">
+                <div class="text-center md:text-left">
+                    <h4 class="text-white font-bold mb-4 md:mb-6 uppercase tracking-wider text-sm">Explore</h4>
+                    <ul class="space-y-3 text-sm flex flex-col items-center md:items-start">
                         <li><a href="index.html" class="hover:text-brand-400 transition-colors flex items-center gap-2">Home</a></li>
                         <li><a href="products.html" class="hover:text-brand-400 transition-colors flex items-center gap-2">Collection</a></li>
                         <li><a href="#" class="hover:text-brand-400 transition-colors flex items-center gap-2">How it Works</a></li>
@@ -132,9 +132,9 @@
                 </div>
 
                 <!-- Social & Contact -->
-                <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-wider text-sm">Connect With Us</h4>
-                    <div class="flex gap-4 mb-6">
+                <div class="text-center md:text-left">
+                    <h4 class="text-white font-bold mb-4 md:mb-6 uppercase tracking-wider text-sm">Connect With Us</h4>
+                    <div class="flex gap-4 mb-6 justify-center md:justify-start">
                         <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1 group">
                             <!-- Insta SVG -->
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
@@ -150,7 +150,7 @@
 
             <div class="border-t border-stone-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-stone-600">
                 <p>&copy; 2024 Luxe Rentals. All rights reserved.</p>
-                <div class="flex gap-6">
+                <div class="flex gap-6 justify-center">
                     <a href="#" class="hover:text-stone-400">Privacy Policy</a>
                     <a href="#" class="hover:text-stone-400">Terms of Service</a>
                 </div>
