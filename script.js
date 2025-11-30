@@ -87,16 +87,16 @@ function createProductCard(product, index = 0) {
                     </button>
                 </div>
                 
-                <div class="p-2 md:p-5 flex flex-col flex-grow cursor-pointer" onclick="window.location.href='detail.html?id=${product.id}'">
-                    <div class="text-[9px] md:text-[10px] font-bold text-brand-500 uppercase tracking-widest mb-1">${product.category}</div>
-                    <h3 class="text-xs md:text-lg font-serif font-bold text-gray-900 mb-1 leading-snug group-hover:text-brand-600 transition-colors line-clamp-2">${product.name}</h3>
+                <div class="p-2.5 md:p-5 flex flex-col flex-grow cursor-pointer" onclick="window.location.href='detail.html?id=${product.id}'">
+                    <div class="text-[9px] md:text-[10px] font-bold text-brand-500 uppercase tracking-widest mb-1 truncate">${product.category}</div>
+                    <h3 class="text-xs md:text-lg font-serif font-bold text-gray-900 mb-1 leading-snug group-hover:text-brand-600 transition-colors line-clamp-2 min-h-[2em]">${product.name}</h3>
                     
                     <div class="mt-auto pt-2 md:pt-3 flex items-end justify-between border-t border-stone-100">
-                        <div>
-                            <p class="text-[10px] md:text-xs text-gray-400 line-through">₹${product.originalPrice.toLocaleString()}</p>
-                            <p class="text-sm md:text-base font-bold text-gray-900">₹${product.price.toLocaleString()}<span class="text-[9px] md:text-[10px] font-normal text-gray-500">/day</span></p>
+                        <div class="flex flex-col">
+                            <p class="text-[9px] md:text-xs text-gray-400 line-through leading-tight">₹${product.originalPrice.toLocaleString()}</p>
+                            <p class="text-sm md:text-base font-bold text-gray-900 leading-tight">₹${product.price.toLocaleString()}<span class="text-[8px] md:text-[10px] font-normal text-gray-500">/day</span></p>
                         </div>
-                        <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-pink-50 flex items-center justify-center text-brand-500 group-hover:bg-brand-500 group-hover:text-white transition-colors">
+                        <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-pink-50 flex items-center justify-center text-brand-500 group-hover:bg-brand-500 group-hover:text-white transition-colors flex-shrink-0 ml-1">
                             <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
                     </div>
@@ -207,6 +207,9 @@ async function initCatalog() {
 
 // 3. Detail Page
 async function initDetail() {
+    // Check if we are on the detail page by element ID, not URL, for robustness
+    if(!document.getElementById('product-detail')) return;
+
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     
