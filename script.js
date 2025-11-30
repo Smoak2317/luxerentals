@@ -347,11 +347,14 @@ function confirmRent() {
     const name = document.getElementById('rent-name').value;
     const mobile = document.getElementById('rent-mobile').value;
     const date = document.getElementById('rent-date').value;
+    const days = document.getElementById('rent-days').value || 1;
 
-    if (!name || !mobile || !date) {
+    if (!name || !mobile || !date || !days) {
         alert("Please fill in all details to proceed.");
         return;
     }
+
+    const totalCost = currentRentProduct.price * days;
 
     const inquiry = {
         date: new Date().toLocaleString(),
@@ -359,7 +362,8 @@ function confirmRent() {
         productName: currentRentProduct.name,
         customerName: name,
         mobile: mobile,
-        requestedDate: date
+        requestedDate: date,
+        duration: days
     };
 
     const existingInquiries = JSON.parse(localStorage.getItem('luxe_inquiries') || '[]');
@@ -374,13 +378,15 @@ function confirmRent() {
 👗 *OUTFIT DETAILS*
 • *Name:* ${currentRentProduct.name}
 • *Code:* ${currentRentProduct.id}
-• *Rent:* ₹${currentRentProduct.price.toLocaleString()} / day
+• *Rate:* ₹${currentRentProduct.price.toLocaleString()} / day
 🔗 *View Item:* ${productLink}
 
 👤 *MY DETAILS*
 • *Name:* ${name}
 • *Mobile:* ${mobile}
 📅 *Event Date:* ${date}
+⏱️ *Duration:* ${days} Days
+💰 *Total Est. Rent:* ₹${totalCost.toLocaleString()}
 
 ✨ *Please confirm if it is available for this date.*`;
 
