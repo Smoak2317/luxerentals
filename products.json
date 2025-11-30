@@ -8,7 +8,8 @@
     "description": "Soft, breathable purple fabric with a flattering flare.\nFeatures a chic white geometric print jacket.\n",
     "image": "https://drive.google.com/thumbnail?id=1RN0tLDfkuNx14MN1aRhbAZ5awFDRU5tM&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": ["Most Rented"]
   },
   {
     "id": "CH002",
@@ -19,7 +20,8 @@
     "description": "A comfortable georgette-blend outfit perfect for any semi-formal occasion.",
     "image": "https://drive.google.com/thumbnail?id=1miY3sefHZg2eEMG_ZBpzu3XjhrkBizxL&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": ["New Arrival"]
   },
   {
     "id": "CH003",
@@ -30,7 +32,8 @@
     "description": "The modern floral print top is paired with a traditional pink skirt for a stunning Indo-Western look.",
     "image": "https://drive.google.com/thumbnail?id=1CTLq8Na5sbN94WcwZXZQAFKDMCJIJ5-d&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": []
   },
   {
     "id": "CH004",
@@ -41,7 +44,8 @@
     "description": "A rich, heavy set featuring peacock and temple design work.\nPerfect for a stunning wedding day or reception look.",
     "image": "https://drive.google.com/thumbnail?id=16lRHh91s6WUjISxmlaNAv7PmZrBorDWa&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": ["Most Rented", "New Arrival"]
   },
   {
     "id": "CH005",
@@ -52,7 +56,8 @@
     "description": "A soft and romantic net outfit perfect for a pre-wedding function or party.\nThe modern ruffle design adds volume and a whimsical look.",
     "image": "https://drive.google.com/thumbnail?id=1kmQv0VnGA4BbTgw5hVoF-BjmbaY1SPyv&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": []
   },
   {
     "id": "CH006",
@@ -63,7 +68,8 @@
     "description": "A light and stylish outfit perfect for a daytime event or garden party.\nThe modern abstract print and ruffle design add a fun, contemporary look.",
     "image": "https://drive.google.com/thumbnail?id=1bDzc80pax8Lm4t1dMw01WY56Y11A_tff&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": ["New Arrival"]
   },
   {
     "id": "CH007",
@@ -74,7 +80,8 @@
     "description": "Elegant sage green lehenga with subtle floral embroidery/print.\nFeatures a chic matching crop top and sheer dupatta with detailed borders.",
     "image": "https://drive.google.com/thumbnail?id=1OunD-NcdONNbJpfeNuR4bu8LeDVMIaQQ&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": []
   },
   {
     "id": "CH008",
@@ -85,7 +92,8 @@
     "description": "Elegant ivory lehenga with delicate pastel floral embroidery.\nFeatures a chic crop top and a full-sleeve matching jacket.",
     "image": "https://drive.google.com/thumbnail?id=1G-ixqnt9vb61SWfEALy6LusKqnv1HHEF&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": []
   },
   {
     "id": "CH009",
@@ -96,7 +104,8 @@
     "description": "Elegant ice blue lehenga with intricate silver and pink floral embroidery.\nFeatures a chic matching choli and a sheer matching net dupatta.\n",
     "image": "https://drive.google.com/thumbnail?id=1jFt4qppR2shee18u9msdvg1OILECewXN&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": ["New Arrival"]
   },
   {
     "id": "CH010",
@@ -107,7 +116,8 @@
     "description": "A sophisticated outfit perfect for a pre-wedding function or party.\nThe classic design offers a timeless and elegant look.",
     "image": "https://drive.google.com/thumbnail?id=13xrbgnu9eGt8a8eIfkmabogbqAl-nwSu&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": []
   },
   {
     "id": "CH011",
@@ -118,7 +128,8 @@
     "description": "Flowy green lehenga with a delicate pink and white floral print.\nFeatures a matching crop top and a sheer organza jacket with puff sleeves.",
     "image": "https://drive.google.com/thumbnail?id=1jblHGlEKjrLZkpbfQJAAsXLL0sR-ShDk&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": []
   },
   {
     "id": "CH012",
@@ -129,6 +140,7 @@
     "description": "Heavy magenta lehenga with rich gold and silver embroidery.\nFeatures a short-sleeve choli and dual dupattas for a complete bridal look.",
     "image": "https://drive.google.com/thumbnail?id=19PmpIURVxYi8SgRSRMfNYx3_OwYzqmgF&sz=w1000",
     "available": true,
-    "size": "Free Size"
+    "size": "Free Size",
+    "tags": ["Most Rented"]
   }
 ]

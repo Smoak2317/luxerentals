@@ -1,4 +1,5 @@
 
+
 // Admin Logic
 let adminProducts = []; // Holds the state of products in the admin panel
 let adminInquiries = [];
@@ -191,6 +192,10 @@ function openAddModal() {
     document.getElementById('new-size').value = "";
     document.getElementById('new-desc').value = "";
     document.getElementById('new-image').value = ""; // Clear Image URL Input
+    
+    // Clear Tags
+    document.getElementById('tag-most-rented').checked = false;
+    document.getElementById('tag-new-arrival').checked = false;
 
     document.getElementById('add-modal').classList.remove('hidden');
 }
@@ -215,6 +220,11 @@ function editProduct(id) {
     
     // Set Image URL
     document.getElementById('new-image').value = product.image;
+    
+    // Set Tags
+    const tags = product.tags || [];
+    document.getElementById('tag-most-rented').checked = tags.includes('Most Rented');
+    document.getElementById('tag-new-arrival').checked = tags.includes('New Arrival');
 
     document.getElementById('add-modal').classList.remove('hidden');
 }
@@ -229,6 +239,11 @@ function saveProduct() {
     const isEdit = !!editId;
 
     const imageUrl = document.getElementById('new-image').value.trim();
+    
+    // Get Tags
+    const tags = [];
+    if (document.getElementById('tag-most-rented').checked) tags.push('Most Rented');
+    if (document.getElementById('tag-new-arrival').checked) tags.push('New Arrival');
 
     const data = {
         id: document.getElementById('new-id').value || `CH${Math.floor(Math.random() * 1000)}`,
@@ -238,8 +253,9 @@ function saveProduct() {
         originalPrice: Number(document.getElementById('new-original').value) || 0,
         description: document.getElementById('new-desc').value,
         image: imageUrl || 'https://via.placeholder.com/400',
-        available: true, // Default to true if new
-        size: document.getElementById('new-size').value
+        available: true, // Default to true if new, logic below handles edit
+        size: document.getElementById('new-size').value,
+        tags: tags
     };
 
     if (!data.name || !data.price) {

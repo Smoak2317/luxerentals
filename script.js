@@ -58,9 +58,21 @@ function createProductCard(product, index = 0) {
     const isAboveFold = index < 4;
     const loadingAttr = isAboveFold ? 'eager' : 'lazy';
     
+    // Status Badge (Top Right)
     const statusBadge = product.available 
         ? `<div class="absolute top-2 right-2 md:top-3 md:right-3 bg-white/95 text-green-700 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded shadow-sm z-10 uppercase tracking-wide">Available</div>`
         : `<div class="absolute top-2 right-2 md:top-3 md:right-3 bg-stone-900/90 text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded shadow-sm z-10 uppercase tracking-wide">Booked</div>`;
+
+    // Tags (Top Left)
+    let tagsHtml = '';
+    if (product.tags && product.tags.length > 0) {
+        tagsHtml = `<div class="absolute top-2 left-2 md:top-3 md:left-3 flex flex-col gap-1 z-10">` + 
+        product.tags.map(tag => {
+            let color = tag === 'New Arrival' ? 'bg-blue-600' : 'bg-purple-600';
+            if (tag === 'Most Rented') color = 'bg-orange-500';
+            return `<span class="${color} text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded shadow-sm uppercase tracking-wide">${tag}</span>`;
+        }).join('') + `</div>`;
+    }
 
     return `
         <div class="group relative block h-full">
@@ -76,6 +88,7 @@ function createProductCard(product, index = 0) {
                     >
                     <div class="absolute inset-0 bg-black/0 group-hover/img:bg-black/5 transition-colors duration-300"></div>
                     ${statusBadge}
+                    ${tagsHtml}
                     
                     <!-- Quick View Button -->
                     <button onclick="openQuickView(event, '${product.id}')" class="hidden md:block absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white text-brand-600 font-bold px-5 py-2 rounded-full shadow-lg hover:bg-brand-50 z-20 text-xs whitespace-nowrap border border-pink-100">
