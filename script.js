@@ -89,7 +89,7 @@ function createProductCard(product, index = 0) {
                 
                 <div class="p-2 md:p-5 flex flex-col flex-grow cursor-pointer" onclick="window.location.href='detail.html?id=${product.id}'">
                     <div class="text-[9px] md:text-[10px] font-bold text-brand-500 uppercase tracking-widest mb-1 truncate">${product.category}</div>
-                    <h3 class="text-xs md:text-lg font-serif font-bold text-gray-900 mb-1 leading-snug group-hover:text-brand-600 transition-colors line-clamp-2 min-h-[2.4em] md:min-h-[2em]">${product.name}</h3>
+                    <h3 class="text-xs md:text-lg font-serif font-bold text-gray-900 mb-1 leading-snug group-hover:text-brand-600 transition-colors line-clamp-2 min-h-[2.4em] md:min-h-[2.5em]">${product.name}</h3>
                     
                     <div class="mt-auto pt-2 md:pt-3 flex items-end justify-between border-t border-stone-100">
                         <div class="flex flex-col">
