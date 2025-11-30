@@ -59,9 +59,9 @@ function createProductCard(product, index = 0) {
     return `
         <div class="group relative block h-full">
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col h-full hover-lift">
-                <!-- Image Container: object-cover with top align to fill blank spaces -->
-                <div class="relative aspect-[3/4] bg-stone-50 cursor-pointer overflow-hidden" onclick="window.location.href='detail.html?id=${product.id}'">
-                    <img loading="${loadingAttr}" src="${product.image}" alt="${product.name}" class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700">
+                <!-- Image Container: object-contain to show full product without cropping -->
+                <div class="relative aspect-[3/4] bg-white cursor-pointer overflow-hidden" onclick="window.location.href='detail.html?id=${product.id}'">
+                    <img loading="${loadingAttr}" src="${product.image}" alt="${product.name}" class="w-full h-full object-contain p-1 transform group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
                     ${statusBadge}
                     
@@ -142,7 +142,7 @@ async function initCatalog() {
         const filtered = products.filter(p => {
             return (state.category === 'All' || p.category === state.category) &&
                    (p.name.toLowerCase().includes(state.search.toLowerCase())) &&
-                   (p.price <= state.maxPrice);
+                   (!state.maxPrice || p.price <= state.maxPrice); // Safety check if maxPrice is undefined
         });
 
         if (filtered.length === 0) {
@@ -174,12 +174,6 @@ async function initCatalog() {
             state.category = btn.dataset.category;
             render();
         });
-    });
-
-    priceRange?.addEventListener('input', (e) => {
-        state.maxPrice = Number(e.target.value);
-        priceValue.textContent = `₹${state.maxPrice}`;
-        render();
     });
 
     render();
