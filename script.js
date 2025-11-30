@@ -49,8 +49,12 @@ async function fetchProducts() {
 
 // Render Product Card
 function createProductCard(product, index = 0) {
-    // Lazy load images if they are not in the top 4 (approx above the fold)
-    const loadingAttr = index > 3 ? 'lazy' : 'eager';
+    // Optimization Strategy:
+    // 1. loading="lazy": Applied to items likely below the fold (index >= 4).
+    //    First 4 items load 'eager' to optimize Largest Contentful Paint (LCP).
+    // 2. decoding="async": Decodes images off the main thread to prevent scrolling jank.
+    const isAboveFold = index < 4;
+    const loadingAttr = isAboveFold ? 'eager' : 'lazy';
     
     const statusBadge = product.available 
         ? `<div class="absolute top-2 right-2 md:top-3 md:right-3 bg-white/95 text-green-700 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 md:px-2 md:py-1 rounded shadow-sm z-10 uppercase tracking-wide">Available</div>`
@@ -59,9 +63,15 @@ function createProductCard(product, index = 0) {
     return `
         <div class="group relative block h-full">
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col h-full hover-lift">
-                <!-- Image Container: object-cover object-top to fill space without blank areas, prioritizing faces/tops -->
+                <!-- Image Container: object-cover object-top to fill space without blank areas -->
                 <div class="relative aspect-[3/4] bg-stone-100 cursor-pointer overflow-hidden" onclick="window.location.href='detail.html?id=${product.id}'">
-                    <img loading="${loadingAttr}" src="${product.image}" alt="${product.name}" class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700">
+                    <img 
+                        loading="${loadingAttr}" 
+                        decoding="async"
+                        src="${product.image}" 
+                        alt="${product.name}" 
+                        class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700"
+                    >
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
                     ${statusBadge}
                     
