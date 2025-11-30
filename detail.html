@@ -80,16 +80,14 @@
 
         <!-- Main Content Grid: Tighter gaps -->
         <div id="detail-content" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 mb-10 md:mb-16 animate-fade-in-up relative z-10">
-            <!-- Left: Gallery -->
+            <!-- Left: Image -->
             <div class="space-y-4">
-                <div class="rounded-2xl overflow-hidden shadow-lg shadow-pink-100/50 border border-white aspect-[3/4] bg-white relative group transition-all">
-                    <img id="main-image" src="" alt="" class="w-full h-full object-cover object-top transition-opacity duration-300">
+                <div class="rounded-2xl overflow-hidden shadow-lg shadow-pink-100/50 border border-white aspect-[3/4] bg-white relative group">
+                    <img id="main-image" src="" alt="" class="w-full h-full object-cover object-top">
                     <div id="availability-badge" class="hidden absolute inset-0 bg-stone-900/60 flex items-center justify-center backdrop-blur-sm">
                         <span class="bg-white text-stone-900 px-6 py-2 font-bold uppercase tracking-widest text-sm md:text-base rounded shadow-xl">Booked</span>
                     </div>
                 </div>
-                <!-- Thumbnails -->
-                <div id="thumbnails-container" class="grid grid-cols-4 gap-2 hidden"></div>
             </div>
 
             <!-- Right: Info -->
@@ -177,7 +175,7 @@
         </div>
     </footer>
 
-    <!-- Rental Inquiry Modal (Updated Layout for Screenshot Match) -->
+    <!-- Rental Inquiry Modal (Updated with Duration) -->
     <div id="rent-modal" class="fixed inset-0 z-[100] hidden" role="dialog" aria-modal="true">
         <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity opacity-0" id="rent-modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
@@ -185,7 +183,7 @@
                 <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-2xl transition-all sm:my-8 w-full max-w-sm opacity-0 scale-95" id="rent-modal-panel">
                     <div class="bg-gradient-to-r from-brand-600 to-purple-600 p-4 text-white">
                         <h3 class="text-lg font-bold font-serif">Rental Inquiry</h3>
-                        <p class="text-xs opacity-90">Enter details to chat on WhatsApp.</p>
+                        <p class="text-xs opacity-90">Please provide your details to proceed.</p>
                         <button type="button" onclick="closeRentModal()" class="absolute right-4 top-4 text-white/80 hover:text-white">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
@@ -193,20 +191,20 @@
                     <div class="p-5 space-y-3">
                         <div id="rent-product-summary" class="flex items-center gap-3 p-2 bg-stone-50 rounded-lg border border-stone-100"></div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-1">Name</label>
-                            <input type="text" id="rent-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="Name">
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Your Name</label>
+                            <input type="text" id="rent-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="e.g. Anjali Sharma">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-1">Mobile (10 digits)</label>
-                            <input type="tel" id="rent-mobile" maxlength="10" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="Number">
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Mobile Number (10 digits)</label>
+                            <input type="tel" id="rent-mobile" maxlength="10" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="e.g. 9876543210">
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-bold text-gray-500 mb-1">Date</label>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">Rental Date</label>
                                 <input type="date" id="rent-date" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none transition">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-gray-500 mb-1">Days (1-10)</label>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">Duration (1-10 Days)</label>
                                 <input type="number" id="rent-days" min="1" max="10" value="1" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="Days">
                             </div>
                         </div>

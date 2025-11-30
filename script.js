@@ -57,8 +57,6 @@ async function fetchProducts() {
 function createProductCard(product, index = 0) {
     const isAboveFold = index < 4;
     const loadingAttr = isAboveFold ? 'eager' : 'lazy';
-    // Support new images array or fallback
-    const mainImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
     
     // Status Badge (Top Right)
     const statusBadge = product.available 
@@ -76,13 +74,6 @@ function createProductCard(product, index = 0) {
         }).join('') + `</div>`;
     }
 
-    // Direct Rent Button (Mobile Friendly Overlay)
-    const rentButton = product.available 
-        ? `<button onclick="openRentModalDirect(event, '${product.id}')" class="absolute bottom-2 right-2 bg-green-500 text-white p-2 rounded-full shadow-lg hover:bg-green-600 hover:scale-110 transition-all z-20 flex items-center justify-center group/btn" title="Rent via WhatsApp">
-            <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-           </button>`
-        : '';
-
     return `
         <div class="group relative block h-full">
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col h-full hover-lift">
@@ -91,16 +82,15 @@ function createProductCard(product, index = 0) {
                     <img 
                         loading="${loadingAttr}" 
                         decoding="async"
-                        src="${mainImage}" 
+                        src="${product.image}" 
                         alt="${product.name}" 
                         class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700"
                     >
                     <div class="absolute inset-0 bg-black/0 group-hover/img:bg-black/5 transition-colors duration-300"></div>
                     ${statusBadge}
                     ${tagsHtml}
-                    ${rentButton}
                     
-                    <!-- Quick View Button (Desktop) -->
+                    <!-- Quick View Button -->
                     <button onclick="openQuickView(event, '${product.id}')" class="hidden md:block absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white text-brand-600 font-bold px-5 py-2 rounded-full shadow-lg hover:bg-brand-50 z-20 text-xs whitespace-nowrap border border-pink-100">
                         Quick View
                     </button>
@@ -201,10 +191,9 @@ async function initHome() {
     container.innerHTML = featured.map(createProductCard).join('');
 }
 
-// 2. Catalog Page (Pagination Implementation)
+// 2. Catalog Page
 async function initCatalog() {
     const container = document.getElementById('products-grid');
-    const paginationContainer = document.getElementById('pagination-container');
     if (!container) return;
 
     container.innerHTML = '<div class="col-span-full text-center py-12 text-pink-400 animate-pulse">Loading collection...</div>';
@@ -219,92 +208,24 @@ async function initCatalog() {
     const categoryBtns = document.querySelectorAll('.category-btn');
 
     let state = { category: 'All', search: '' };
-    let currentPage = 1;
-    const itemsPerPage = 12; // 12 items per page
 
     function render() {
-        // 1. Filter
         const filtered = products.filter(p => {
             return (state.category === 'All' || p.category === state.category) &&
                    (p.name.toLowerCase().includes(state.search.toLowerCase()));
         });
 
-        // 2. Paginate
-        const totalItems = filtered.length;
-        const totalPages = Math.ceil(totalItems / itemsPerPage);
-        
-        // Ensure current page is valid
-        if (currentPage > totalPages) currentPage = 1;
-        
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const paginatedItems = filtered.slice(startIndex, endIndex);
-
-        // 3. Render Grid
         if (filtered.length === 0) {
             container.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400">No matching items found.</div>';
-            paginationContainer.innerHTML = '';
         } else {
-            container.innerHTML = paginatedItems.map(createProductCard).join('');
-            renderPagination(totalPages);
+            container.innerHTML = filtered.map(createProductCard).join('');
         }
     }
-
-    function renderPagination(totalPages) {
-        if (totalPages <= 1) {
-            paginationContainer.innerHTML = '';
-            return;
-        }
-
-        let buttons = '';
-        
-        // Prev Button
-        buttons += `
-            <button onclick="changePage(${currentPage - 1})" 
-                class="px-3 py-1 rounded border border-gray-200 text-gray-600 hover:bg-pink-50 hover:text-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
-                ${currentPage === 1 ? 'disabled' : ''}>
-                Prev
-            </button>
-        `;
-
-        // Page Numbers
-        for (let i = 1; i <= totalPages; i++) {
-            if (i === currentPage) {
-                buttons += `<button class="px-3 py-1 rounded bg-brand-600 text-white font-bold text-sm shadow-md">${i}</button>`;
-            } else {
-                buttons += `<button onclick="changePage(${i})" class="px-3 py-1 rounded border border-gray-200 text-gray-600 hover:bg-pink-50 hover:text-brand-600 transition-colors text-sm">${i}</button>`;
-            }
-        }
-
-        // Next Button
-        buttons += `
-            <button onclick="changePage(${currentPage + 1})" 
-                class="px-3 py-1 rounded border border-gray-200 text-gray-600 hover:bg-pink-50 hover:text-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
-                ${currentPage === totalPages ? 'disabled' : ''}>
-                Next
-            </button>
-        `;
-
-        paginationContainer.innerHTML = buttons;
-    }
-
-    // Expose changePage to global scope so onclick works
-    window.changePage = (newPage) => {
-        currentPage = newPage;
-        render();
-        // Smooth scroll to top of grid
-        const gridTop = document.getElementById('products-grid').offsetTop - 120;
-        window.scrollTo({ top: gridTop, behavior: 'smooth' });
-    };
 
     const activeClasses = ['bg-gradient-to-r', 'from-brand-500', 'to-purple-600', 'text-white', 'shadow-md', 'shadow-pink-500/30', 'font-semibold'];
     const inactiveClasses = ['bg-white', 'border', 'border-stone-200', 'text-stone-600', 'hover:border-brand-300', 'hover:text-brand-600', 'hover:bg-pink-50', 'hover:shadow-md', 'font-medium'];
 
-    searchInput?.addEventListener('input', (e) => { 
-        state.search = e.target.value; 
-        currentPage = 1; // Reset to page 1 on search
-        render(); 
-    });
+    searchInput?.addEventListener('input', (e) => { state.search = e.target.value; render(); });
     
     categoryBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -316,7 +237,6 @@ async function initCatalog() {
             btn.classList.add(...activeClasses);
 
             state.category = btn.dataset.category;
-            currentPage = 1; // Reset to page 1 on filter
             render();
         });
     });
@@ -324,7 +244,7 @@ async function initCatalog() {
     render();
 }
 
-// 3. Detail Page - Updated for Gallery
+// 3. Detail Page
 async function initDetail() {
     if(!document.getElementById('product-detail')) return;
 
@@ -345,49 +265,7 @@ async function initDetail() {
     }
 
     document.title = `${product.name} | Luxe Rentals`;
-    
-    // --- Image Gallery Logic ---
-    const images = product.images && product.images.length > 0 ? product.images : [product.image];
-    const mainImgEl = document.getElementById('main-image');
-    mainImgEl.src = images[0];
-    
-    // Render Thumbnails
-    const thumbsContainer = document.getElementById('thumbnails-container');
-    if (thumbsContainer) {
-        if (images.length > 1) {
-            thumbsContainer.innerHTML = images.map((img, idx) => `
-                <div class="aspect-square rounded-lg bg-stone-100 overflow-hidden cursor-pointer border-2 ${idx === 0 ? 'border-brand-500 ring-1 ring-brand-200' : 'border-transparent'} hover:border-brand-300 transition-all" onclick="changeMainImage('${img}', this)">
-                    <img src="${img}" class="w-full h-full object-cover" alt="Detail ${idx + 1}">
-                </div>
-            `).join('');
-            thumbsContainer.classList.remove('hidden');
-        } else {
-            thumbsContainer.innerHTML = ''; // Clear if only 1 image
-            thumbsContainer.classList.add('hidden');
-        }
-    }
-    
-    // Global function for onclick in template string
-    window.changeMainImage = (src, thumbEl) => {
-        // Update Main Image
-        const main = document.getElementById('main-image');
-        main.style.opacity = '0.5';
-        setTimeout(() => {
-            main.src = src;
-            main.style.opacity = '1';
-        }, 150);
-        
-        // Update Active Thumbnail styling
-        const allThumbs = document.getElementById('thumbnails-container').children;
-        for (let t of allThumbs) {
-            t.classList.remove('border-brand-500', 'ring-1', 'ring-brand-200');
-            t.classList.add('border-transparent');
-        }
-        thumbEl.classList.remove('border-transparent');
-        thumbEl.classList.add('border-brand-500', 'ring-1', 'ring-brand-200');
-    };
-
-    // --- Info Population ---
+    document.getElementById('main-image').src = product.image;
     document.getElementById('product-category').textContent = product.category;
     document.getElementById('product-name').textContent = product.name;
     document.getElementById('product-desc').textContent = product.description;
@@ -438,31 +316,21 @@ async function initDetail() {
 
 // --- Rent Modal Logic ---
 
-// New Function for Direct Card Click
-function openRentModalDirect(event, productId) {
-    event.preventDefault();
-    event.stopPropagation();
-    const product = globalProducts.find(p => p.id === productId);
-    if(product) openRentModal(product);
-}
-
 function openRentModal(product) {
     if (!product) return;
     currentRentProduct = product;
     
     document.body.style.overflow = 'hidden';
 
-    const mainImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
-
-    // Set Summary (Updated to match screenshot style)
+    // Set Summary
     const summary = document.getElementById('rent-product-summary');
     if (summary) {
         summary.innerHTML = `
-            <img src="${mainImage}" class="w-12 h-12 rounded object-cover object-top border border-stone-200 shadow-sm">
+            <img src="${product.image}" class="w-12 h-12 rounded object-cover object-top border border-stone-200">
             <div>
-                <div class="text-[10px] font-bold text-brand-600 uppercase tracking-wide">${product.category}</div>
+                <div class="text-[10px] font-bold text-brand-600 uppercase">${product.category}</div>
                 <div class="font-bold text-gray-900 leading-tight line-clamp-1 text-sm">${product.name}</div>
-                <div class="text-xs text-gray-500 font-medium">₹${product.price.toLocaleString()}/day</div>
+                <div class="text-xs text-gray-600">₹${product.price.toLocaleString()}/day</div>
             </div>
         `;
     }
@@ -563,23 +431,23 @@ function confirmRent() {
 
     const productLink = new URL(`detail.html?id=${currentRentProduct.id}`, window.location.href).href;
     
-    // Reformatted Message with Emojis
     const message = 
-`👋 *Rental Inquiry*
+`👋 *Hello, I'm interested in renting this outfit!*
 
-👗 *${currentRentProduct.name}*
-• ID: ${currentRentProduct.id}
-• Price: ₹${currentRentProduct.price.toLocaleString()}/day
-🔗 ${productLink}
+👗 *OUTFIT DETAILS*
+• *Name:* ${currentRentProduct.name}
+• *Code:* ${currentRentProduct.id}
+• *Rate:* ₹${currentRentProduct.price.toLocaleString()} / day
+🔗 *View Item:* ${productLink}
 
-👤 *Customer Details*
-• Name: ${name}
-• Mobile: ${mobile}
-📅 Date: ${date}
-⏱️ Duration: ${duration} Days
-💰 *Total: ₹${totalCost.toLocaleString()}*
+👤 *MY DETAILS*
+• *Name:* ${name}
+• *Mobile:* ${mobile}
+📅 *Event Date:* ${date}
+⏱️ *Duration:* ${duration} Days
+💰 *Total Est. Rent:* ₹${totalCost.toLocaleString()}
 
-✨ Is this available?`;
+✨ *Please confirm if it is available for this date.*`;
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     
@@ -603,10 +471,7 @@ function openQuickView(event, productId) {
     
     document.body.style.overflow = 'hidden';
 
-    // Image logic
-    const mainImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
-    document.getElementById('qv-image').src = mainImage;
-    
+    document.getElementById('qv-image').src = product.image;
     document.getElementById('qv-name').textContent = product.name;
     document.getElementById('qv-category').textContent = product.category;
     document.getElementById('qv-desc').textContent = product.description;
