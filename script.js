@@ -193,9 +193,10 @@ async function initHome() {
     container.innerHTML = featured.map(createProductCard).join('');
 }
 
-// 2. Catalog Page
+// 2. Catalog Page (Pagination Implementation)
 async function initCatalog() {
     const container = document.getElementById('products-grid');
+    const paginationContainer = document.getElementById('pagination-container');
     if (!container) return;
 
     container.innerHTML = '<div class="col-span-full text-center py-12 text-pink-400 animate-pulse">Loading collection...</div>';
@@ -210,24 +211,92 @@ async function initCatalog() {
     const categoryBtns = document.querySelectorAll('.category-btn');
 
     let state = { category: 'All', search: '' };
+    let currentPage = 1;
+    const itemsPerPage = 12; // 12 items per page
 
     function render() {
+        // 1. Filter
         const filtered = products.filter(p => {
             return (state.category === 'All' || p.category === state.category) &&
                    (p.name.toLowerCase().includes(state.search.toLowerCase()));
         });
 
+        // 2. Paginate
+        const totalItems = filtered.length;
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        
+        // Ensure current page is valid
+        if (currentPage > totalPages) currentPage = 1;
+        
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedItems = filtered.slice(startIndex, endIndex);
+
+        // 3. Render Grid
         if (filtered.length === 0) {
             container.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400">No matching items found.</div>';
+            paginationContainer.innerHTML = '';
         } else {
-            container.innerHTML = filtered.map(createProductCard).join('');
+            container.innerHTML = paginatedItems.map(createProductCard).join('');
+            renderPagination(totalPages);
         }
     }
+
+    function renderPagination(totalPages) {
+        if (totalPages <= 1) {
+            paginationContainer.innerHTML = '';
+            return;
+        }
+
+        let buttons = '';
+        
+        // Prev Button
+        buttons += `
+            <button onclick="changePage(${currentPage - 1})" 
+                class="px-3 py-1 rounded border border-gray-200 text-gray-600 hover:bg-pink-50 hover:text-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+                ${currentPage === 1 ? 'disabled' : ''}>
+                Prev
+            </button>
+        `;
+
+        // Page Numbers
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === currentPage) {
+                buttons += `<button class="px-3 py-1 rounded bg-brand-600 text-white font-bold text-sm shadow-md">${i}</button>`;
+            } else {
+                buttons += `<button onclick="changePage(${i})" class="px-3 py-1 rounded border border-gray-200 text-gray-600 hover:bg-pink-50 hover:text-brand-600 transition-colors text-sm">${i}</button>`;
+            }
+        }
+
+        // Next Button
+        buttons += `
+            <button onclick="changePage(${currentPage + 1})" 
+                class="px-3 py-1 rounded border border-gray-200 text-gray-600 hover:bg-pink-50 hover:text-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+                ${currentPage === totalPages ? 'disabled' : ''}>
+                Next
+            </button>
+        `;
+
+        paginationContainer.innerHTML = buttons;
+    }
+
+    // Expose changePage to global scope so onclick works
+    window.changePage = (newPage) => {
+        currentPage = newPage;
+        render();
+        // Smooth scroll to top of grid
+        const gridTop = document.getElementById('products-grid').offsetTop - 120;
+        window.scrollTo({ top: gridTop, behavior: 'smooth' });
+    };
 
     const activeClasses = ['bg-gradient-to-r', 'from-brand-500', 'to-purple-600', 'text-white', 'shadow-md', 'shadow-pink-500/30', 'font-semibold'];
     const inactiveClasses = ['bg-white', 'border', 'border-stone-200', 'text-stone-600', 'hover:border-brand-300', 'hover:text-brand-600', 'hover:bg-pink-50', 'hover:shadow-md', 'font-medium'];
 
-    searchInput?.addEventListener('input', (e) => { state.search = e.target.value; render(); });
+    searchInput?.addEventListener('input', (e) => { 
+        state.search = e.target.value; 
+        currentPage = 1; // Reset to page 1 on search
+        render(); 
+    });
     
     categoryBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -239,6 +308,7 @@ async function initCatalog() {
             btn.classList.add(...activeClasses);
 
             state.category = btn.dataset.category;
+            currentPage = 1; // Reset to page 1 on filter
             render();
         });
     });
