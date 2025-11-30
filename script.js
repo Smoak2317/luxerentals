@@ -74,7 +74,7 @@ function createProductCard(product, index = 0) {
                         alt="${product.name}" 
                         class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700"
                     >
-                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
+                    <div class="absolute inset-0 bg-black/0 group-hover/img:bg-black/5 transition-colors duration-300"></div>
                     ${statusBadge}
                     
                     <!-- Quick View Button -->
@@ -309,6 +309,7 @@ function openRentModal(product) {
     
     document.body.style.overflow = 'hidden';
 
+    // Set Summary
     const summary = document.getElementById('rent-product-summary');
     if (summary) {
         summary.innerHTML = `
@@ -319,6 +320,24 @@ function openRentModal(product) {
                 <div class="text-xs text-gray-600">₹${product.price.toLocaleString()}/day</div>
             </div>
         `;
+    }
+
+    // Reset Form Fields
+    const nameInput = document.getElementById('rent-name');
+    if (nameInput) nameInput.value = '';
+
+    const mobileInput = document.getElementById('rent-mobile');
+    if (mobileInput) mobileInput.value = '';
+
+    const daysInput = document.getElementById('rent-days');
+    if (daysInput) daysInput.value = '1';
+
+    // Set Date Min to Today
+    const dateInput = document.getElementById('rent-date');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+        dateInput.value = ''; // Reset date
     }
 
     const modal = document.getElementById('rent-modal');
@@ -344,17 +363,23 @@ function closeRentModal() {
 function confirmRent() {
     if (!currentRentProduct) return;
 
-    const name = document.getElementById('rent-name').value;
-    const mobile = document.getElementById('rent-mobile').value;
+    const name = document.getElementById('rent-name').value.trim();
+    const mobile = document.getElementById('rent-mobile').value.trim();
     const date = document.getElementById('rent-date').value;
-    const days = document.getElementById('rent-days').value || 1;
+    const days = document.getElementById('rent-days').value;
 
     if (!name || !mobile || !date || !days) {
         alert("Please fill in all details to proceed.");
         return;
     }
 
-    const totalCost = currentRentProduct.price * days;
+    const duration = parseInt(days);
+    if (isNaN(duration) || duration < 1) {
+        alert("Duration must be at least 1 day.");
+        return;
+    }
+
+    const totalCost = currentRentProduct.price * duration;
 
     const inquiry = {
         date: new Date().toLocaleString(),
@@ -363,7 +388,7 @@ function confirmRent() {
         customerName: name,
         mobile: mobile,
         requestedDate: date,
-        duration: days
+        duration: duration
     };
 
     const existingInquiries = JSON.parse(localStorage.getItem('luxe_inquiries') || '[]');
@@ -385,7 +410,7 @@ function confirmRent() {
 • *Name:* ${name}
 • *Mobile:* ${mobile}
 📅 *Event Date:* ${date}
-⏱️ *Duration:* ${days} Days
+⏱️ *Duration:* ${duration} Days
 💰 *Total Est. Rent:* ₹${totalCost.toLocaleString()}
 
 ✨ *Please confirm if it is available for this date.*`;
