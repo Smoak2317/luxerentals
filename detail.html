@@ -60,17 +60,17 @@
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 flex-grow" id="product-detail">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-12 flex-grow" id="product-detail">
         <a href="products.html" class="inline-flex items-center gap-2 text-gray-500 hover:text-brand-700 transition-colors mb-4 md:mb-8 group text-sm font-medium">
             <span class="transform group-hover:-translate-x-1 transition-transform">←</span> Back to Collection
         </a>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 mb-20 animate-fade-in-up">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-16 mb-12 md:mb-20 animate-fade-in-up">
             <!-- Left: Image -->
             <div class="space-y-4">
                 <div class="rounded-2xl overflow-hidden shadow-2xl aspect-[3/4] bg-stone-50 relative group">
                     <!-- Ensure full view (contain) with NO PADDING -->
-                    <img id="main-image" src="" alt="" class="w-full h-full object-contain">
+                    <img id="main-image" src="" alt="" class="w-full h-full object-cover object-top">
                     <div id="availability-badge" class="hidden absolute inset-0 bg-stone-900/60 flex items-center justify-center backdrop-blur-sm">
                         <span class="bg-white text-stone-900 px-8 py-3 font-bold uppercase tracking-widest text-lg rounded shadow-xl">Booked</span>
                     </div>
@@ -83,7 +83,7 @@
                     <span id="product-category" class="px-4 py-1.5 bg-brand-50 text-brand-700 rounded-full text-xs font-bold uppercase tracking-widest border border-brand-100"></span>
                 </div>
 
-                <h1 id="product-name" class="text-2xl md:text-5xl font-serif font-bold text-gray-900 mb-4 md:mb-6 leading-tight"></h1>
+                <h1 id="product-name" class="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-4 md:mb-6 leading-tight"></h1>
                 
                 <div class="flex flex-wrap items-end gap-4 md:gap-6 mb-6 md:mb-8 pb-6 md:pb-8 border-b border-gray-100">
                     <p id="product-price" class="text-3xl md:text-5xl font-bold text-gray-900 tracking-tight"></p>
@@ -94,7 +94,7 @@
                 </div>
 
                 <div class="mb-8 md:mb-10">
-                    <p id="product-desc" class="text-base md:text-lg text-gray-600 font-light leading-relaxed mb-8"></p>
+                    <p id="product-desc" class="text-base md:text-lg text-gray-600 font-light leading-relaxed mb-6 md:mb-8"></p>
                     <div class="grid grid-cols-2 gap-3 md:gap-4">
                         <div class="bg-stone-50 p-4 md:p-5 rounded-xl border border-stone-100">
                             <span class="text-[10px] text-gray-500 uppercase tracking-wider font-bold block mb-1">Size</span>
@@ -118,51 +118,7 @@
             </div>
         </div>
 
-        <div id="similar-products-grid" class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 opacity-80 hover:opacity-100 transition-opacity">
-            <!-- Filled by JS -->
-        </div>
-    </div>
-
-    <!-- Rental Inquiry Modal -->
-    <div id="rent-modal" class="fixed inset-0 z-[70] hidden" role="dialog" aria-modal="true">
-        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity opacity-0" id="rent-modal-backdrop"></div>
-        <div class="fixed inset-0 z-10 overflow-y-auto">
-            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 w-full max-w-md opacity-0 scale-95" id="rent-modal-panel">
-                    <div class="bg-gradient-to-r from-brand-600 to-purple-600 p-6 text-white">
-                        <h3 class="text-xl font-bold font-serif">Rental Inquiry</h3>
-                        <p class="text-sm opacity-90">Please provide your details to proceed.</p>
-                        <button type="button" onclick="closeRentModal()" class="absolute right-4 top-4 text-white/80 hover:text-white">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                        </button>
-                    </div>
-                    <div class="p-6 space-y-4">
-                        <div id="rent-product-summary" class="flex items-center gap-3 p-3 bg-stone-50 rounded-lg border border-stone-100">
-                            <!-- JS fills this -->
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
-                            <input type="text" id="rent-name" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="e.g. Anjali Sharma">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-                            <input type="tel" id="rent-mobile" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-500 outline-none transition" placeholder="e.g. 9876543210">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Rental Date</label>
-                            <input type="date" id="rent-date" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-500 outline-none transition">
-                        </div>
-                        <button id="confirm-rent-btn" onclick="confirmRent()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-green-600 hover:to-emerald-700 transition-all hover-lift flex justify-center items-center gap-2">
-                            <span>Continue to WhatsApp</span>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                        <span>Rent via WhatsApp</span>
-                    </button>
-                    <p class="text-center text-xs text-gray-400 mt-3">Instant availability check.</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="similar-products-grid" class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 opacity-80 hover:opacity-100 transition-opacity">
+        <div id="similar-products-grid" class="mt-12 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 opacity-80 hover:opacity-100 transition-opacity">
             <!-- Filled by JS -->
         </div>
     </div>
@@ -222,7 +178,7 @@
     </footer>
 
     <!-- Rental Inquiry Modal -->
-    <div id="rent-modal" class="fixed inset-0 z-[70] hidden" role="dialog" aria-modal="true">
+    <div id="rent-modal" class="fixed inset-0 z-[100] hidden" role="dialog" aria-modal="true">
         <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity opacity-0" id="rent-modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
@@ -258,10 +214,6 @@
                     <p class="text-center text-xs text-gray-400 mt-3">Instant availability check.</p>
                 </div>
             </div>
-        </div>
-
-        <div id="similar-products-grid" class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 opacity-80 hover:opacity-100 transition-opacity">
-            <!-- Filled by JS -->
         </div>
     </div>
 
@@ -320,7 +272,7 @@
     </footer>
 
     <!-- Rental Inquiry Modal -->
-    <div id="rent-modal" class="fixed inset-0 z-[70] hidden" role="dialog" aria-modal="true">
+    <div id="rent-modal" class="fixed inset-0 z-[100] hidden" role="dialog" aria-modal="true">
         <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity opacity-0" id="rent-modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
@@ -357,65 +309,7 @@
                 </div>
             </div>
         </div>
-
-        <div id="similar-products-grid" class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 opacity-80 hover:opacity-100 transition-opacity">
-            <!-- Filled by JS -->
-        </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-stone-900 text-stone-300 mt-auto border-t border-pink-900/20 relative overflow-hidden">
-        <!-- Decorative background elements -->
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-500 via-purple-500 to-brand-500"></div>
-        <div class="absolute -top-24 -right-24 w-64 h-64 bg-pink-900/10 rounded-full blur-3xl"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                
-                <!-- Brand -->
-                <div class="space-y-4">
-                    <h3 class="text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400">Luxe Rentals</h3>
-                    <p class="text-stone-400 text-sm leading-relaxed max-w-xs">
-                        Redefining elegance with premium ethnic wear rentals. Shine on your special day without the commitment.
-                    </p>
-                </div>
-
-                <!-- Links -->
-                <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-wider text-sm">Explore</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="index.html" class="hover:text-brand-400 transition-colors flex items-center gap-2">Home</a></li>
-                        <li><a href="products.html" class="hover:text-brand-400 transition-colors flex items-center gap-2">Collection</a></li>
-                        <li><a href="#" class="hover:text-brand-400 transition-colors flex items-center gap-2">How it Works</a></li>
-                    </ul>
-                </div>
-
-                <!-- Social & Contact -->
-                <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-wider text-sm">Connect With Us</h4>
-                    <div class="flex gap-4 mb-6">
-                        <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1 group">
-                            <!-- Insta SVG -->
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                        </a>
-                        <a href="https://twitter.com" target="_blank" class="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-blue-400 hover:text-white transition-all transform hover:-translate-y-1 group">
-                            <!-- Twitter SVG -->
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
-                        </a>
-                    </div>
-                    <p class="text-sm text-stone-500">hello@luxerentals.com</p>
-                </div>
-            </div>
-
-            <div class="border-t border-stone-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-stone-600">
-                <p>&copy; 2024 Luxe Rentals. All rights reserved.</p>
-                <div class="flex gap-6">
-                    <a href="#" class="hover:text-stone-400">Privacy Policy</a>
-                    <a href="#" class="hover:text-stone-400">Terms of Service</a>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <script src="script.js"></script>
 </body>

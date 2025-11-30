@@ -59,9 +59,9 @@ function createProductCard(product, index = 0) {
     return `
         <div class="group relative block h-full">
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col h-full hover-lift">
-                <!-- Image Container: object-contain with NO padding -->
+                <!-- Image Container: object-cover with top align to fill blank spaces -->
                 <div class="relative aspect-[3/4] bg-stone-50 cursor-pointer overflow-hidden" onclick="window.location.href='detail.html?id=${product.id}'">
-                    <img loading="${loadingAttr}" src="${product.image}" alt="${product.name}" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-700">
+                    <img loading="${loadingAttr}" src="${product.image}" alt="${product.name}" class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
                     ${statusBadge}
                     
@@ -71,9 +71,9 @@ function createProductCard(product, index = 0) {
                     </button>
                 </div>
                 
-                <div class="p-3 md:p-5 flex flex-col flex-grow cursor-pointer" onclick="window.location.href='detail.html?id=${product.id}'">
+                <div class="p-2 md:p-5 flex flex-col flex-grow cursor-pointer" onclick="window.location.href='detail.html?id=${product.id}'">
                     <div class="text-[9px] md:text-[10px] font-bold text-brand-500 uppercase tracking-widest mb-1">${product.category}</div>
-                    <h3 class="text-sm md:text-lg font-serif font-bold text-gray-900 mb-1 leading-snug group-hover:text-brand-600 transition-colors line-clamp-2">${product.name}</h3>
+                    <h3 class="text-xs md:text-lg font-serif font-bold text-gray-900 mb-1 leading-snug group-hover:text-brand-600 transition-colors line-clamp-2">${product.name}</h3>
                     
                     <div class="mt-auto pt-2 md:pt-3 flex items-end justify-between border-t border-stone-100">
                         <div>
@@ -245,12 +245,15 @@ async function initDetail() {
 function openRentModal(product) {
     if (!product) return;
     currentRentProduct = product;
+    
+    // Prevent scrolling
+    document.body.style.overflow = 'hidden';
 
     // Fill Product Summary
     const summary = document.getElementById('rent-product-summary');
     if (summary) {
         summary.innerHTML = `
-            <img src="${product.image}" class="w-16 h-16 rounded object-cover border border-stone-200">
+            <img src="${product.image}" class="w-16 h-16 rounded object-cover object-top border border-stone-200">
             <div>
                 <div class="text-xs font-bold text-brand-600 uppercase">${product.category}</div>
                 <div class="font-bold text-gray-900 leading-tight line-clamp-1">${product.name}</div>
@@ -271,6 +274,9 @@ function openRentModal(product) {
 }
 
 function closeRentModal() {
+    // Re-enable scrolling
+    document.body.style.overflow = '';
+
     const modal = document.getElementById('rent-modal');
     if (modal) {
         document.getElementById('rent-modal-backdrop').classList.add('opacity-0');
@@ -345,6 +351,9 @@ function openQuickView(event, productId) {
 
     const product = globalProducts.find(p => p.id === productId);
     if (!product) return;
+    
+    // Prevent scrolling
+    document.body.style.overflow = 'hidden';
 
     // Populate
     document.getElementById('qv-image').src = product.image;
@@ -392,6 +401,9 @@ function openQuickView(event, productId) {
 }
 
 function closeQuickView() {
+    // Re-enable scrolling
+    document.body.style.overflow = '';
+
     const backdrop = document.getElementById('modal-backdrop');
     const panel = document.getElementById('modal-panel');
     backdrop.classList.add('opacity-0');

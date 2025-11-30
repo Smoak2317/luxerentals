@@ -1,11 +1,14 @@
 /* Global Styles */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
   color: #1f2937; /* Gray-800 */
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .font-serif {
