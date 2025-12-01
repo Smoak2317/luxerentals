@@ -94,13 +94,16 @@ function renderProductTable() {
     tbody.innerHTML = '';
     
     adminProducts.forEach(p => {
+        // Handle images array or fallback
+        const mainImage = p.images && p.images.length > 0 ? p.images[0] : p.image;
+        
         const tr = document.createElement('tr');
         tr.className = "hover:bg-brand-50/30 transition group";
         tr.innerHTML = `
             <td class="p-5">
                 <div class="flex items-center gap-4">
                     <a href="detail.html?id=${p.id}" target="_blank" class="relative group/img cursor-pointer" title="View on Live Site">
-                        <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover bg-gray-100 border border-gray-200 shadow-sm group-hover/img:ring-2 ring-brand-400 transition-all" onerror="this.src='https://via.placeholder.com/100?text=No+Img'">
+                        <img src="${mainImage}" class="w-12 h-12 rounded-lg object-cover bg-gray-100 border border-gray-200 shadow-sm group-hover/img:ring-2 ring-brand-400 transition-all" onerror="this.src='https://via.placeholder.com/100?text=No+Img'">
                         <div class="absolute inset-0 bg-black/0 group-hover/img:bg-black/10 rounded-lg transition-colors flex items-center justify-center">
                              <i data-lucide="external-link" class="w-4 h-4 text-white opacity-0 group-hover/img:opacity-100 transition-opacity drop-shadow-md"></i>
                         </div>
@@ -191,7 +194,7 @@ function openAddModal() {
     document.getElementById('new-original').value = "";
     document.getElementById('new-size').value = "";
     document.getElementById('new-desc').value = "";
-    document.getElementById('new-image').value = ""; // Clear Image URL Input
+    document.getElementById('new-images').value = ""; // Clear Image URLs
     
     // Clear Tags
     document.getElementById('tag-most-rented').checked = false;
@@ -218,8 +221,9 @@ function editProduct(id) {
     document.getElementById('new-size').value = product.size;
     document.getElementById('new-desc').value = product.description;
     
-    // Set Image URL
-    document.getElementById('new-image').value = product.image;
+    // Set Image URLs (Join array with newlines)
+    const images = product.images && product.images.length > 0 ? product.images : [product.image];
+    document.getElementById('new-images').value = images.join('\n');
     
     // Set Tags
     const tags = product.tags || [];
@@ -238,7 +242,9 @@ function saveProduct() {
     const editId = document.getElementById('edit-mode-id').value;
     const isEdit = !!editId;
 
-    const imageUrl = document.getElementById('new-image').value.trim();
+    // Get Images from Textarea (Split by newline and filter empty)
+    const imagesInput = document.getElementById('new-images').value.trim();
+    const imagesList = imagesInput.split('\n').map(url => url.trim()).filter(url => url.length > 0);
     
     // Get Tags
     const tags = [];
@@ -252,8 +258,8 @@ function saveProduct() {
         price: Number(document.getElementById('new-price').value) || 0,
         originalPrice: Number(document.getElementById('new-original').value) || 0,
         description: document.getElementById('new-desc').value,
-        image: imageUrl || 'https://via.placeholder.com/400',
-        available: true, // Default to true if new, logic below handles edit
+        images: imagesList.length > 0 ? imagesList : ['https://via.placeholder.com/400'], // Save as Array
+        available: true, 
         size: document.getElementById('new-size').value,
         tags: tags
     };
@@ -276,7 +282,6 @@ function saveProduct() {
 
     closeAddModal();
     renderProductTable();
-    // alert(isEdit ? "Product updated!" : "Product added!"); // Optional feedback
 }
 
 function deleteProduct(id) {
