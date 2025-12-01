@@ -81,6 +81,7 @@ async function initAdminData() {
         if (savedInquiries) {
             adminInquiries = JSON.parse(savedInquiries);
             document.getElementById('dash-total-inquiries').textContent = adminInquiries.length;
+            renderTopRentals(); // Render top stats
         }
     } catch (e) {
         console.error("Failed to fetch products", e);
@@ -161,12 +162,51 @@ function renderInquiriesTable() {
     });
 }
 
+function renderTopRentals() {
+    const list = document.getElementById('dash-top-rentals');
+    if (!list) return;
+    list.innerHTML = '';
+
+    if (adminInquiries.length === 0) {
+        list.innerHTML = '<li class="text-sm text-gray-400 italic p-2">No rental data available yet.</li>';
+        return;
+    }
+
+    // Count occurrences
+    const counts = {};
+    adminInquiries.forEach(inq => {
+        const key = inq.productName;
+        counts[key] = (counts[key] || 0) + 1;
+    });
+
+    // Sort by count descending
+    const sorted = Object.entries(counts)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 5); // Take top 5
+
+    sorted.forEach(([name, count], index) => {
+        const li = document.createElement('li');
+        li.className = "flex items-center justify-between p-3 bg-stone-50 rounded-xl border border-stone-100";
+        li.innerHTML = `
+            <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs font-bold">${index + 1}</span>
+                <span class="text-sm font-medium text-gray-700 truncate max-w-[140px] md:max-w-[200px]">${name}</span>
+            </div>
+            <div class="text-xs font-bold bg-white px-2 py-1 rounded-md border border-stone-200 text-gray-600 shadow-sm">
+                ${count} requests
+            </div>
+        `;
+        list.appendChild(li);
+    });
+}
+
 function clearInquiries() {
     if(confirm("Are you sure you want to clear all inquiry history?")) {
         adminInquiries = [];
         localStorage.removeItem('luxe_inquiries');
         renderInquiriesTable();
         document.getElementById('dash-total-inquiries').textContent = 0;
+        renderTopRentals();
     }
 }
 

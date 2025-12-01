@@ -100,7 +100,7 @@
                     <p class="text-gray-500">Welcome back, Admin.</p>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 hover:shadow-md transition-shadow">
                         <div class="flex justify-between items-start">
                             <div>
@@ -121,18 +121,31 @@
                     </div>
                 </div>
 
-                <div class="bg-gradient-to-br from-white to-brand-50 border border-brand-100 p-8 rounded-2xl shadow-sm">
-                    <h3 class="text-lg font-bold text-brand-900 mb-4 flex items-center gap-2">
-                        <i data-lucide="zap" class="w-5 h-5"></i> Quick Guide: Updating Your Site
-                    </h3>
-                    <div class="grid md:grid-cols-2 gap-6 text-sm text-gray-600">
-                        <div class="bg-white p-4 rounded-xl border border-brand-100/50">
-                            <span class="font-bold text-brand-600 block mb-1">1. Modify Data</span>
-                            Go to the <strong>Products</strong> tab. You can Add new items using Image URLs or Edit existing details like price and availability.
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-brand-100/50">
-                            <span class="font-bold text-brand-600 block mb-1">2. Save Changes</span>
-                            Click <strong>"Save Changes to JSON"</strong>. Copy the code and paste it into your local <code>products.json</code> file to make it live.
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Top Requested Items -->
+                    <div class="lg:col-span-1 bg-white border border-stone-100 p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                             <i data-lucide="trending-up" class="w-5 h-5 text-brand-500"></i> Top Requested Items
+                        </h3>
+                        <ul id="dash-top-rentals" class="space-y-4">
+                            <!-- JS Injected -->
+                        </ul>
+                    </div>
+
+                    <!-- Quick Guide -->
+                    <div class="lg:col-span-2 bg-gradient-to-br from-white to-brand-50 border border-brand-100 p-8 rounded-2xl shadow-sm">
+                        <h3 class="text-lg font-bold text-brand-900 mb-4 flex items-center gap-2">
+                            <i data-lucide="zap" class="w-5 h-5"></i> Quick Guide: Updating Your Site
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-6 text-sm text-gray-600">
+                            <div class="bg-white p-4 rounded-xl border border-brand-100/50">
+                                <span class="font-bold text-brand-600 block mb-1">1. Modify Data</span>
+                                Go to the <strong>Products</strong> tab. You can Add new items using Image URLs or Edit existing details like price and availability.
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-brand-100/50">
+                                <span class="font-bold text-brand-600 block mb-1">2. Save Changes</span>
+                                Click <strong>"Save Changes to JSON"</strong>. Copy the code and paste it into your local <code>products.json</code> file to make it live.
+                            </div>
                         </div>
                     </div>
                 </div>
