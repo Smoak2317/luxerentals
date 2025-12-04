@@ -3,17 +3,17 @@
     "id": "CH001",
     "name": "Purple Anarkali Set",
     "category": "Anarkali",
-    "price": 500,
+    "price": 300,
     "originalPrice": 10000,
     "description": "Soft, breathable purple fabric with a flattering flare.\nFeatures a chic white geometric print jacket.\n",
     "images": [
-      "https://drive.google.com/thumbnail?id=1RN0tLDfkuNx14MN1aRhbAZ5awFDRU5tM&sz=w1000",
-      "https://drive.google.com/thumbnail?id=1RN0tLDfkuNx14MN1aRhbAZ5awFDRU5tM&sz=w1000",
       "https://drive.google.com/thumbnail?id=1RN0tLDfkuNx14MN1aRhbAZ5awFDRU5tM&sz=w1000"
     ],
     "available": true,
     "size": "Free Size",
-    "tags": ["Most Rented"]
+    "tags": [
+      "Most Rented"
+    ]
   },
   {
     "id": "CH002",
@@ -23,12 +23,13 @@
     "originalPrice": 7500,
     "description": "A comfortable georgette-blend outfit perfect for any semi-formal occasion.",
     "images": [
-      "https://drive.google.com/thumbnail?id=1miY3sefHZg2eEMG_ZBpzu3XjhrkBizxL&sz=w1000",
       "https://drive.google.com/thumbnail?id=1miY3sefHZg2eEMG_ZBpzu3XjhrkBizxL&sz=w1000"
     ],
     "available": true,
     "size": "Free Size",
-    "tags": ["New Arrival"]
+    "tags": [
+      "New Arrival"
+    ]
   },
   {
     "id": "CH003",
@@ -59,17 +60,19 @@
     ],
     "available": true,
     "size": "Free Size",
-    "tags": ["Most Rented", "New Arrival"]
+    "tags": [
+      "Most Rented",
+      "New Arrival"
+    ]
   },
   {
     "id": "CH005",
     "name": "Pastel Pink Ruffle Lehenga",
     "category": "Lehenga",
-    "price": 1000,
+    "price": 500,
     "originalPrice": 11000,
     "description": "A soft and romantic net outfit perfect for a pre-wedding function or party.\nThe modern ruffle design adds volume and a whimsical look.",
     "images": [
-      "https://drive.google.com/thumbnail?id=1kmQv0VnGA4BbTgw5hVoF-BjmbaY1SPyv&sz=w1000",
       "https://drive.google.com/thumbnail?id=1kmQv0VnGA4BbTgw5hVoF-BjmbaY1SPyv&sz=w1000"
     ],
     "available": true,
@@ -80,26 +83,26 @@
     "id": "CH006",
     "name": "Pastel Ruffle Print Lehenga",
     "category": "Lehenga",
-    "price": 1000,
+    "price": 500,
     "originalPrice": 12000,
     "description": "A light and stylish outfit perfect for a daytime event or garden party.\nThe modern abstract print and ruffle design add a fun, contemporary look.",
     "images": [
-      "https://drive.google.com/thumbnail?id=1bDzc80pax8Lm4t1dMw01WY56Y11A_tff&sz=w1000",
       "https://drive.google.com/thumbnail?id=1bDzc80pax8Lm4t1dMw01WY56Y11A_tff&sz=w1000"
     ],
     "available": true,
     "size": "Free Size",
-    "tags": ["New Arrival"]
+    "tags": [
+      "New Arrival"
+    ]
   },
   {
     "id": "CH007",
     "name": "Sage Green Floral Lehenga",
     "category": "Lehenga",
-    "price": 1100,
+    "price": 500,
     "originalPrice": 15000,
     "description": "Elegant sage green lehenga with subtle floral embroidery/print.\nFeatures a chic matching crop top and sheer dupatta with detailed borders.",
     "images": [
-      "https://drive.google.com/thumbnail?id=1OunD-NcdONNbJpfeNuR4bu8LeDVMIaQQ&sz=w1000",
       "https://drive.google.com/thumbnail?id=1OunD-NcdONNbJpfeNuR4bu8LeDVMIaQQ&sz=w1000"
     ],
     "available": true,
@@ -110,11 +113,10 @@
     "id": "CH008",
     "name": "Ivory Floral Embroidered Set",
     "category": "Lehenga",
-    "price": 5000,
+    "price": 1500,
     "originalPrice": 30000,
     "description": "Elegant ivory lehenga with delicate pastel floral embroidery.\nFeatures a chic crop top and a full-sleeve matching jacket.",
     "images": [
-      "https://drive.google.com/thumbnail?id=1G-ixqnt9vb61SWfEALy6LusKqnv1HHEF&sz=w1000",
       "https://drive.google.com/thumbnail?id=1G-ixqnt9vb61SWfEALy6LusKqnv1HHEF&sz=w1000"
     ],
     "available": true,
@@ -125,26 +127,26 @@
     "id": "CH009",
     "name": "Ice Blue Embroidered Lehenga choli",
     "category": "Lehenga",
-    "price": 5500,
+    "price": 3000,
     "originalPrice": 20000,
     "description": "Elegant ice blue lehenga with intricate silver and pink floral embroidery.\nFeatures a chic matching choli and a sheer matching net dupatta.\n",
     "images": [
-      "https://drive.google.com/thumbnail?id=1jFt4qppR2shee18u9msdvg1OILECewXN&sz=w1000",
       "https://drive.google.com/thumbnail?id=1jFt4qppR2shee18u9msdvg1OILECewXN&sz=w1000"
     ],
     "available": true,
     "size": "Free Size",
-    "tags": ["New Arrival"]
+    "tags": [
+      "New Arrival"
+    ]
   },
   {
     "id": "CH010",
     "name": "Light Pink Festive Lehenga",
     "category": "Lehenga",
-    "price": 700,
+    "price": 500,
     "originalPrice": 5000,
     "description": "A sophisticated outfit perfect for a pre-wedding function or party.\nThe classic design offers a timeless and elegant look.",
     "images": [
-      "https://drive.google.com/thumbnail?id=13xrbgnu9eGt8a8eIfkmabogbqAl-nwSu&sz=w1000",
       "https://drive.google.com/thumbnail?id=13xrbgnu9eGt8a8eIfkmabogbqAl-nwSu&sz=w1000"
     ],
     "available": true,
@@ -180,6 +182,8 @@
     ],
     "available": true,
     "size": "Free Size",
-    "tags": ["Most Rented"]
+    "tags": [
+      "Most Rented"
+    ]
   }
 ]
