@@ -86,29 +86,22 @@ function showToast(msg) {
 async function fetchProducts() {
     try {
         if (globalProducts.length > 0) return globalProducts;
-
-        // Try multiple paths
-        const paths = ['/products.json', './products.json', 'products.json'];
-
-        for (const path of paths) {
-            try {
-                const response = await fetch(path);
-                if (response.ok) {
-                    globalProducts = await response.json();
-                    console.log(`Loaded from: ${path}`);
-                    return globalProducts;
-                }
-            } catch (e) {
-                console.log(`Failed to load from ${path}`);
-            }
+        const response = await fetch(PRODUCTS_URL);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        throw new Error('Could not load products from any path');
+        globalProducts = await response.json();
+        return globalProducts;
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching products:', error);
+        // Helpful alert for local development issues
+        if (window.location.protocol === 'file:') {
+            alert("Error: Cannot load data. \n\nBrowsers block loading JSON files directly from the hard drive (C:/...). \n\nPlease run this site using a Local Server (e.g., 'Live Server' in VS Code or 'python -m http.server').");
+        }
         return [];
     }
 }
+
 // Render Product Card - Updated for Compact Scale
 function createProductCard(product, index = 0) {
     const isAboveFold = index < 4;
