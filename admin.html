@@ -306,16 +306,16 @@
 
     <!-- Export JSON Modal -->
     <div id="export-modal" class="hidden fixed inset-0 z-[70] bg-stone-900/80 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[85vh] overflow-hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-6xl flex flex-col h-[90vh] overflow-hidden">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-900 text-white">
                 <div>
                     <h3 class="text-lg font-bold">Generated JSON</h3>
-                    <p class="text-xs text-gray-400">Replace content in products.json</p>
+                    <p class="text-xs text-gray-400">View or Edit content for products.json</p>
                 </div>
                 <button onclick="closeExportModal()" class="text-white/60 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             <div class="flex-grow relative bg-[#1e1e1e]">
-                <textarea id="json-export-output" class="w-full h-full bg-[#1e1e1e] text-[#a9b7c6] font-mono text-xs p-6 outline-none resize-none leading-relaxed" readonly></textarea>
+                <textarea id="json-export-output" class="w-full h-full bg-[#1e1e1e] text-[#a9b7c6] font-mono text-sm p-6 outline-none resize-none leading-relaxed"></textarea>
                 <button onclick="copyToClipboard()" class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-xs border border-white/10 backdrop-blur font-medium transition-colors">Copy Code</button>
             </div>
             <div class="p-5 border-t border-gray-200 bg-gray-50 flex justify-end">
