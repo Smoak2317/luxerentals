@@ -2,7 +2,7 @@
 
 // Configuration
 const WHATSAPP_NUMBER = "7201800959";
-const PRODUCTS_URL = '/products.json';
+const PRODUCTS_URL = 'products.json';
 let globalProducts = []; // Cache products for Quick View
 let currentRentProduct = null; // Store product for rent modal
 
