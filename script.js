@@ -2,7 +2,7 @@
 
 // Configuration
 const WHATSAPP_NUMBER = "7201800959";
-const PRODUCTS_URL = 'products.json';
+const PRODUCTS_URL = '/products.json';
 let globalProducts = []; // Cache products for Quick View
 let currentRentProduct = null; // Store product for rent modal
 
@@ -82,30 +82,61 @@ function showToast(msg) {
     }, 2000);
 }
 
-// Fetch Products
+// Fetch Products - FIXED FOR VERCEL
 async function fetchProducts() {
     try {
         if (globalProducts.length > 0) return globalProducts;
 
-        // Try multiple paths
-        const paths = ['/products.json', './products.json', 'products.json'];
+        // Use absolute path from domain root
+        const url = `${window.location.origin}/products.json`;
 
-        for (const path of paths) {
-            try {
-                const response = await fetch(path);
-                if (response.ok) {
-                    globalProducts = await response.json();
-                    console.log(`Loaded from: ${path}`);
-                    return globalProducts;
-                }
-            } catch (e) {
-                console.log(`Failed to load from ${path}`);
-            }
+        console.log('Fetching from:', url);
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            cache: 'no-cache'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        throw new Error('Could not load products from any path');
+        const data = await response.json();
+        console.log('✅ Products loaded:', data.length);
+        globalProducts = data;
+        return globalProducts;
+
     } catch (error) {
-        console.error('Error:', error);
+        console.error('❌ Error fetching products:', error);
+
+        // Show user-friendly error
+        const errorDiv = document.createElement('div');
+        errorDiv.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-50 border-2 border-red-400 text-red-800 px-6 py-4 rounded-xl shadow-2xl z-[9999] max-w-md";
+        errorDiv.innerHTML = `
+            <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="flex-1">
+                    <strong class="font-bold block mb-1">Failed to load products</strong>
+                    <p class="text-sm">Please check your connection and refresh the page.</p>
+                    <button onclick="location.reload()" class="mt-3 bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                        Reload Page
+                    </button>
+                </div>
+                <button onclick="this.closest('div').remove()" class="text-red-400 hover:text-red-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+        document.body.appendChild(errorDiv);
+
         return [];
     }
 }
