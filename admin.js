@@ -22,6 +22,7 @@ document.getElementById('admin-login-form').addEventListener('submit', (e) => {
         sessionStorage.setItem('admin_auth', 'true');
         showPanel();
         initAdminData();
+        showAdminToast("Welcome back, Admin!", "success");
     } else {
         alert('Incorrect Access Key');
     }
@@ -37,11 +38,21 @@ function logoutAdmin() {
     window.location.reload();
 }
 
-// Styling for active tabs (updated for new theme)
+// Styling for active tabs with animation reset
 function switchTab(tabName) {
-    document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
-    document.getElementById(`view-${tabName}`).classList.remove('hidden');
+    // Hide all
+    document.querySelectorAll('[id^="view-"]').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('animate-fade-in'); // Reset animation class
+    });
+
+    const newView = document.getElementById(`view-${tabName}`);
+    newView.classList.remove('hidden');
     
+    // Trigger reflow to restart animation
+    void newView.offsetWidth; 
+    newView.classList.add('animate-fade-in');
+
     const activeClasses = ['bg-gradient-to-r', 'from-brand-500', 'to-purple-600', 'text-white', 'shadow-lg', 'shadow-pink-500/20'];
     const inactiveClasses = ['text-gray-600', 'hover:bg-brand-50', 'hover:text-brand-600'];
 
@@ -50,15 +61,15 @@ function switchTab(tabName) {
         btn.classList.add(...inactiveClasses);
         // Reset icons
         const icon = btn.querySelector('i');
-        if(icon) icon.classList.add('opacity-70');
+        if(icon) icon.classList.add('text-gray-400'); // Reset icon color if needed
+        const bg = btn.querySelector('span.absolute');
+        if(bg) bg.classList.remove('opacity-100');
     });
 
     const activeBtn = document.getElementById(`tab-${tabName}`);
     activeBtn.classList.remove(...inactiveClasses);
     activeBtn.classList.add(...activeClasses);
-    const activeIcon = activeBtn.querySelector('i');
-    if(activeIcon) activeIcon.classList.remove('opacity-70');
-
+    
     if (tabName === 'products') renderProductTable();
     if (tabName === 'inquiries') renderInquiriesTable();
 }
@@ -85,6 +96,7 @@ async function initAdminData() {
         }
     } catch (e) {
         console.error("Failed to fetch products", e);
+        showAdminToast("Failed to load product data", "error");
     }
 }
 
@@ -99,7 +111,8 @@ function renderProductTable() {
         const mainImage = p.images && p.images.length > 0 ? p.images[0] : p.image;
         
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-brand-50/30 transition group";
+        tr.id = `row-${p.id}`;
+        tr.className = "hover:bg-brand-50/30 transition-all group duration-300";
         tr.innerHTML = `
             <td class="p-5">
                 <div class="flex items-center gap-4">
@@ -123,11 +136,11 @@ function renderProductTable() {
                 </button>
             </td>
             <td class="p-5 text-right">
-                <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onclick="editProduct('${p.id}')" class="text-brand-600 hover:bg-brand-50 p-2 rounded-lg transition" title="Edit">
+                <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0">
+                    <button onclick="editProduct('${p.id}')" class="text-brand-600 hover:bg-brand-50 p-2 rounded-lg transition active:scale-95" title="Edit">
                          <i data-lucide="edit-2" class="w-4 h-4"></i>
                     </button>
-                    <button onclick="deleteProduct('${p.id}')" class="text-red-400 hover:bg-red-50 p-2 rounded-lg transition" title="Delete">
+                    <button onclick="deleteProduct('${p.id}')" class="text-red-400 hover:bg-red-50 p-2 rounded-lg transition active:scale-95" title="Delete">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -186,10 +199,10 @@ function renderTopRentals() {
 
     sorted.forEach(([name, count], index) => {
         const li = document.createElement('li');
-        li.className = "flex items-center justify-between p-3 bg-stone-50 rounded-xl border border-stone-100";
+        li.className = "flex items-center justify-between p-3 bg-stone-50 rounded-xl border border-stone-100 hover:bg-stone-100 transition-colors";
         li.innerHTML = `
             <div class="flex items-center gap-3">
-                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs font-bold">${index + 1}</span>
+                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs font-bold shadow-sm">${index + 1}</span>
                 <span class="text-sm font-medium text-gray-700 truncate max-w-[140px] md:max-w-[200px]">${name}</span>
             </div>
             <div class="text-xs font-bold bg-white px-2 py-1 rounded-md border border-stone-200 text-gray-600 shadow-sm">
@@ -207,6 +220,7 @@ function clearInquiries() {
         renderInquiriesTable();
         document.getElementById('dash-total-inquiries').textContent = 0;
         renderTopRentals();
+        showAdminToast("History Cleared", "info");
     }
 }
 
@@ -217,16 +231,20 @@ function toggleAvailability(id) {
     if (product) {
         product.available = !product.available;
         renderProductTable();
+        showAdminToast(product.available ? "Marked as Available" : "Marked as Booked", "info");
     }
 }
 
-// Open Modal for ADD
+// Open Modal for ADD - Smooth Transition
 function openAddModal() {
+    const modal = document.getElementById('add-modal');
+    const panel = document.getElementById('add-modal-panel');
+    
+    // Reset fields
     document.getElementById('modal-title').textContent = "Add New Product";
     document.getElementById('save-btn').textContent = "Add Product";
     document.getElementById('edit-mode-id').value = "";
     
-    // Clear inputs
     document.getElementById('new-id').value = "";
     document.getElementById('new-name').value = "";
     document.getElementById('new-category').value = "Bridal";
@@ -234,13 +252,17 @@ function openAddModal() {
     document.getElementById('new-original').value = "";
     document.getElementById('new-size').value = "";
     document.getElementById('new-desc').value = "";
-    document.getElementById('new-images').value = ""; // Clear Image URLs
-    
-    // Clear Tags
+    document.getElementById('new-images').value = "";
     document.getElementById('tag-most-rented').checked = false;
     document.getElementById('tag-new-arrival').checked = false;
 
-    document.getElementById('add-modal').classList.remove('hidden');
+    // Show modal
+    modal.classList.remove('hidden');
+    // Animate in
+    requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        panel.classList.remove('opacity-0', 'scale-95');
+    });
 }
 
 // Open Modal for EDIT
@@ -270,64 +292,106 @@ function editProduct(id) {
     document.getElementById('tag-most-rented').checked = tags.includes('Most Rented');
     document.getElementById('tag-new-arrival').checked = tags.includes('New Arrival');
 
-    document.getElementById('add-modal').classList.remove('hidden');
+    const modal = document.getElementById('add-modal');
+    const panel = document.getElementById('add-modal-panel');
+    
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        panel.classList.remove('opacity-0', 'scale-95');
+    });
 }
 
 function closeAddModal() {
-    document.getElementById('add-modal').classList.add('hidden');
+    const modal = document.getElementById('add-modal');
+    const panel = document.getElementById('add-modal-panel');
+    
+    modal.classList.add('opacity-0');
+    panel.classList.add('opacity-0', 'scale-95');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
 }
 
 // Save (Add or Update)
 function saveProduct() {
-    const editId = document.getElementById('edit-mode-id').value;
-    const isEdit = !!editId;
+    const btn = document.getElementById('save-btn');
+    const originalText = btn.textContent;
+    btn.textContent = "Saving...";
+    btn.disabled = true;
 
-    // Get Images from Textarea (Split by newline and filter empty)
-    const imagesInput = document.getElementById('new-images').value.trim();
-    const imagesList = imagesInput.split('\n').map(url => url.trim()).filter(url => url.length > 0);
-    
-    // Get Tags
-    const tags = [];
-    if (document.getElementById('tag-most-rented').checked) tags.push('Most Rented');
-    if (document.getElementById('tag-new-arrival').checked) tags.push('New Arrival');
+    // Delay slightly to show processing state
+    setTimeout(() => {
+        const editId = document.getElementById('edit-mode-id').value;
+        const isEdit = !!editId;
 
-    const data = {
-        id: document.getElementById('new-id').value || `CH${Math.floor(Math.random() * 1000)}`,
-        name: document.getElementById('new-name').value,
-        category: document.getElementById('new-category').value,
-        price: Number(document.getElementById('new-price').value) || 0,
-        originalPrice: Number(document.getElementById('new-original').value) || 0,
-        description: document.getElementById('new-desc').value,
-        images: imagesList.length > 0 ? imagesList : ['https://via.placeholder.com/400'], // Save as Array
-        available: true, 
-        size: document.getElementById('new-size').value,
-        tags: tags
-    };
+        // Get Images from Textarea (Split by newline and filter empty)
+        const imagesInput = document.getElementById('new-images').value.trim();
+        const imagesList = imagesInput.split('\n').map(url => url.trim()).filter(url => url.length > 0);
+        
+        // Get Tags
+        const tags = [];
+        if (document.getElementById('tag-most-rented').checked) tags.push('Most Rented');
+        if (document.getElementById('tag-new-arrival').checked) tags.push('New Arrival');
 
-    if (!data.name || !data.price) {
-        alert("Name and Price are required.");
-        return;
-    }
+        const data = {
+            id: document.getElementById('new-id').value || `CH${Math.floor(Math.random() * 1000)}`,
+            name: document.getElementById('new-name').value,
+            category: document.getElementById('new-category').value,
+            price: Number(document.getElementById('new-price').value) || 0,
+            originalPrice: Number(document.getElementById('new-original').value) || 0,
+            description: document.getElementById('new-desc').value,
+            images: imagesList.length > 0 ? imagesList : ['https://via.placeholder.com/400'], // Save as Array
+            available: true, 
+            size: document.getElementById('new-size').value,
+            tags: tags
+        };
 
-    if (isEdit) {
-        const index = adminProducts.findIndex(p => p.id === editId);
-        if (index !== -1) {
-            // Keep availability status from existing
-            data.available = adminProducts[index].available;
-            adminProducts[index] = data;
+        if (!data.name || !data.price) {
+            alert("Name and Price are required.");
+            btn.textContent = originalText;
+            btn.disabled = false;
+            return;
         }
-    } else {
-        adminProducts.push(data);
-    }
 
-    closeAddModal();
-    renderProductTable();
+        if (isEdit) {
+            const index = adminProducts.findIndex(p => p.id === editId);
+            if (index !== -1) {
+                // Keep availability status from existing
+                data.available = adminProducts[index].available;
+                adminProducts[index] = data;
+                showAdminToast("Product Updated Successfully", "success");
+            }
+        } else {
+            adminProducts.push(data);
+            showAdminToast("Product Added Successfully", "success");
+        }
+
+        btn.textContent = originalText;
+        btn.disabled = false;
+        closeAddModal();
+        renderProductTable();
+        document.getElementById('dash-total-products').textContent = adminProducts.length;
+    }, 600);
 }
 
 function deleteProduct(id) {
     if (confirm("Delete this product from the list?")) {
-        adminProducts = adminProducts.filter(p => p.id !== id);
-        renderProductTable();
+        const row = document.getElementById(`row-${id}`);
+        if(row) {
+            // Animate out
+            row.style.transition = 'all 0.5s';
+            row.style.transform = 'translateX(20px)';
+            row.style.opacity = '0';
+            
+            setTimeout(() => {
+                adminProducts = adminProducts.filter(p => p.id !== id);
+                renderProductTable();
+                document.getElementById('dash-total-products').textContent = adminProducts.length;
+                showAdminToast("Product Deleted", "error");
+            }, 500);
+        }
     }
 }
 
@@ -335,16 +399,68 @@ function deleteProduct(id) {
 function exportJSON() {
     const jsonString = JSON.stringify(adminProducts, null, 2);
     document.getElementById('json-export-output').value = jsonString;
-    document.getElementById('export-modal').classList.remove('hidden');
+    
+    const modal = document.getElementById('export-modal');
+    const panel = document.getElementById('export-modal-panel');
+    
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        panel.classList.remove('opacity-0', 'scale-95');
+    });
 }
 
 function closeExportModal() {
-    document.getElementById('export-modal').classList.add('hidden');
+    const modal = document.getElementById('export-modal');
+    const panel = document.getElementById('export-modal-panel');
+    
+    modal.classList.add('opacity-0');
+    panel.classList.add('opacity-0', 'scale-95');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
 }
 
 function copyToClipboard() {
     const copyText = document.getElementById("json-export-output");
     copyText.select();
     document.execCommand("copy");
-    alert("JSON code copied! Paste this into products.json");
+    showAdminToast("JSON Code Copied to Clipboard!", "success");
+}
+
+// --- Toast System ---
+function showAdminToast(message, type = 'info') {
+    const container = document.getElementById('admin-toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    
+    let icon = '';
+    let bgColor = 'bg-stone-800';
+    let textColor = 'text-white';
+
+    if (type === 'success') {
+        icon = '<svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+    } else if (type === 'error') {
+        icon = '<svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+    } else {
+        icon = '<svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+    }
+
+    toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl ${bgColor} ${textColor} transform transition-all duration-500 translate-y-10 opacity-0 backdrop-blur-md`;
+    toast.innerHTML = `${icon} <span class="font-medium text-sm">${message}</span>`;
+
+    container.appendChild(toast);
+
+    // Animate In
+    requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-10', 'opacity-0');
+    });
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-x-full');
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
 }
