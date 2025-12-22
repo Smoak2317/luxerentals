@@ -153,26 +153,13 @@ function createProductCard(product, index = 0) {
                     <!-- Mobile Rent Button -->
                     <button onclick="event.stopPropagation(); openRentModal({id:'${product.id}', name:'${product.name.replace(/'/g, "\\'")}', price:${product.price}, images:['${mainImage}'], category:'${product.category}'})" class="md:hidden absolute bottom-2 left-2 bg-white/90 p-2 rounded-full shadow-md text-green-600 hover:text-green-700 transition-all z-20 backdrop-blur-[2px]">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                    </button>
-                </div>
-                
-                <!-- Content - Reduced Padding & Font Sizes -->
-                <div class="p-2 md:p-4 flex flex-col flex-grow cursor-pointer" onclick="window.location.href='detail.html?id=${product.id}'">
-                    <div class="text-[9px] font-bold text-brand-500 uppercase tracking-widest mb-1 truncate">${product.category}</div>
-                    <h3 class="text-xs md:text-base font-serif font-bold text-gray-900 mb-1 leading-snug group-hover:text-brand-600 transition-colors line-clamp-2 min-h-[2.4em] md:min-h-[2.5em]">${product.name}</h3>
-                    
-                    <div class="mt-auto pt-2 flex items-end justify-between border-t border-stone-100">
-                        <div class="flex flex-col">
-                            <p class="text-[9px] text-gray-400 line-through leading-tight">₹${product.originalPrice.toLocaleString()}</p>
-                            <p class="text-sm font-bold text-gray-900 leading-tight">₹${product.price.toLocaleString()}<span class="text-[8px] font-normal text-gray-500">/day</span></p>
-                        </div>
-                        <div class="w-6 h-6 rounded-full bg-pink-50 flex items-center justify-center text-brand-500 group-hover:bg-brand-500 group-hover:text-white transition-colors flex-shrink-0 ml-1">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     `;
 }
 
@@ -236,19 +223,114 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 1. Home Page
 async function initHome() {
+    // Always fetch first
+    if (globalProducts.length === 0) await fetchProducts();
+
+    // Check for slider and init if present
+    if (document.getElementById('hero-slider')) {
+        await initHeroSlider();
+    }
+
     const container = document.getElementById('featured-products');
     if (!container) return;
     
     container.innerHTML = '<div class="col-span-full text-center py-12 text-pink-400 animate-pulse">Loading collection...</div>';
     
-    const products = await fetchProducts();
+    const products = globalProducts;
+    
     if (products.length === 0) {
         container.innerHTML = '<div class="col-span-full text-center text-gray-400">No products found.</div>';
         return;
     }
 
     const featured = products.slice(0, 3); // Top 3
-    container.innerHTML = featured.map(createProductCard).join('');
+    container.innerHTML = featured.map((p, i) => createProductCard(p, i)).join('');
+}
+
+// Hero Slider Functionality
+async function initHeroSlider() {
+    const sliderContainer = document.getElementById('hero-slider');
+    if (!sliderContainer) return;
+
+    if (globalProducts.length === 0) {
+        await fetchProducts();
+    }
+    
+    if (globalProducts.length === 0) {
+        sliderContainer.innerHTML = '<div class="flex h-full items-center justify-center text-gray-400">No images</div>';
+        return;
+    }
+
+    // 5 random products
+    const shuffled = [...globalProducts].sort(() => 0.5 - Math.random());
+    const slides = shuffled.slice(0, 5);
+
+    sliderContainer.innerHTML = ''; 
+
+    // Create Carousel Wrapper
+    // Fix: We use w-full (100% of container) for the wrapper width, not N * 100%.
+    // We let flexbox handle the flow and translateX move the whole track.
+    const wrapper = document.createElement('div');
+    wrapper.className = "flex h-full w-full transition-transform duration-500 ease-out";
+    sliderContainer.appendChild(wrapper);
+
+    slides.forEach(p => {
+        const img = p.images && p.images.length > 0 ? p.images[0] : p.image;
+        const slide = document.createElement('div');
+        // Fix: Slide is w-full (100% of wrapper), flex-shrink-0 ensures it stays full width and doesn't squash.
+        slide.className = "w-full h-full flex-shrink-0 relative cursor-pointer";
+        slide.innerHTML = `
+            <img src="${img}" class="w-full h-full object-cover object-top" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x600?text=Image+Not+Found'">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <p class="text-white font-bold text-lg">${p.name}</p>
+            </div>
+        `;
+        slide.onclick = () => window.location.href = `detail.html?id=${p.id}`;
+        wrapper.appendChild(slide);
+    });
+
+    // Navigation Buttons
+    const btnClass = "absolute top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white text-gray-800 p-2 rounded-full backdrop-blur-sm transition opacity-0 group-hover:opacity-100 z-10 shadow-lg cursor-pointer";
+    
+    const prevBtn = document.createElement('button');
+    prevBtn.className = `${btnClass} left-4`;
+    prevBtn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>`;
+    
+    const nextBtn = document.createElement('button');
+    nextBtn.className = `${btnClass} right-4`;
+    nextBtn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>`;
+
+    sliderContainer.appendChild(prevBtn);
+    sliderContainer.appendChild(nextBtn);
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    const updateSlider = () => {
+        // Move wrapper by -100% * currentIndex.
+        // Since wrapper is 100% width, and slides are 100% width, this moves 1 slide length.
+        wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    };
+
+    const nextSlide = (e) => {
+        if(e) e.stopPropagation();
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateSlider();
+    }
+
+    const prevSlide = (e) => {
+        if(e) e.stopPropagation();
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlider();
+    }
+
+    nextBtn.onclick = nextSlide;
+    prevBtn.onclick = prevSlide;
+
+    // Auto-play
+    let interval = setInterval(nextSlide, 3500);
+    sliderContainer.addEventListener('mouseenter', () => clearInterval(interval));
+    sliderContainer.addEventListener('mouseleave', () => interval = setInterval(nextSlide, 3500));
 }
 
 // 2. Catalog Page (Pagination Implementation)
@@ -295,7 +377,7 @@ async function initCatalog() {
             container.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400">No matching items found.</div>';
             paginationContainer.innerHTML = '';
         } else {
-            container.innerHTML = paginatedItems.map(createProductCard).join('');
+            container.innerHTML = paginatedItems.map((p, i) => createProductCard(p, i)).join('');
             renderPagination(totalPages);
         }
     }
@@ -463,184 +545,15 @@ async function initDetail() {
         waBtn.className = "flex-grow flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-bold transition-all shadow-md hover:shadow-xl shadow-green-500/10 transform hover:-translate-y-0.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700";
         waBtn.innerHTML = `
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-            <span>Rent via WhatsApp</span>
-        `;
-    } else {
-        waBtn.classList.add('bg-gray-300', 'cursor-not-allowed', 'flex-grow');
-        waBtn.classList.remove('bg-gradient-to-r', 'from-green-500', 'to-emerald-600');
-        waBtn.innerHTML = '<span>Unavailable</span>';
-        waBtn.onclick = (e) => e.preventDefault();
-    }
-    
-    // Attach Share Event
-    if (shareBtn) {
-        shareBtn.onclick = (e) => shareProduct(e, product.id);
-    }
-
-    const similarContainer = document.getElementById('similar-products-grid');
-    if (similarContainer) {
-        const similar = products
-            .filter(p => p.category === product.category && p.id !== product.id)
-            .slice(0, 4);
-        similarContainer.innerHTML = similar.map(p => createProductCard(p, 10)).join('');
-    }
-
-    document.getElementById('detail-loading').classList.add('hidden');
-    document.getElementById('detail-content').classList.remove('hidden');
-    const backLink = document.getElementById('detail-back-link');
-    if(backLink) {
-        backLink.classList.remove('hidden');
-        backLink.classList.add('inline-flex');
-    }
-}
-
-// --- Rent Modal Logic ---
-
-function openRentModal(product) {
-    if (!product) return;
-    currentRentProduct = product;
-    
-    document.body.style.overflow = 'hidden';
-
-    const mainImage = product.images && product.images.length > 0 ? product.images[0] : product.image;
-
-    // Set Summary
-    const summary = document.getElementById('rent-product-summary');
-    if (summary) {
-        summary.innerHTML = `
-            <img src="${mainImage}" class="w-12 h-12 rounded object-cover object-top border border-stone-200">
-            <div>
-                <div class="text-[10px] font-bold text-brand-600 uppercase">${product.category}</div>
-                <div class="font-bold text-gray-900 leading-tight line-clamp-1 text-sm">${product.name}</div>
-                <div class="text-xs text-gray-600">₹${product.price.toLocaleString()}/day</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        `;
-    }
-
-    // Reset Form Fields
-    const nameInput = document.getElementById('rent-name');
-    if (nameInput) nameInput.value = '';
-
-    const mobileInput = document.getElementById('rent-mobile');
-    if (mobileInput) mobileInput.value = '';
-
-    const daysInput = document.getElementById('rent-days');
-    if (daysInput) daysInput.value = '1';
-
-    // Set Date Min to Today
-    const dateInput = document.getElementById('rent-date');
-    if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.min = today;
-        dateInput.value = ''; // Reset date
-    }
-
-    const modal = document.getElementById('rent-modal');
-    if (modal) {
-        modal.classList.remove('hidden');
-        setTimeout(() => {
-            document.getElementById('rent-modal-backdrop').classList.remove('opacity-0');
-            document.getElementById('rent-modal-panel').classList.remove('opacity-0', 'scale-95');
-        }, 10);
-    }
+        </div>
+    </div>
+    `;
 }
-
-function closeRentModal() {
-    document.body.style.overflow = '';
-    const modal = document.getElementById('rent-modal');
-    if (modal) {
-        document.getElementById('rent-modal-backdrop').classList.add('opacity-0');
-        document.getElementById('rent-modal-panel').classList.add('opacity-0', 'scale-95');
-        setTimeout(() => modal.classList.add('hidden'), 300);
-    }
-}
-
-function confirmRent() {
-    if (!currentRentProduct) return;
-
-    const name = document.getElementById('rent-name').value.trim();
-    const mobile = document.getElementById('rent-mobile').value.trim();
-    const date = document.getElementById('rent-date').value;
-    const days = document.getElementById('rent-days').value;
-
-    if (!name || !mobile || !date || !days) {
-        alert("Please fill in all details to proceed.");
-        return;
-    }
-
-    // 1. Mobile Number Validation: Exactly 10 digits
-    const mobileRegex = /^\d{10}$/;
-    if (!mobileRegex.test(mobile)) {
-        alert("Please enter a valid 10-digit mobile number.");
-        return;
-    }
-
-    // 2. Duration Validation: 1 to 10 days
-    const duration = parseInt(days);
-    if (isNaN(duration) || duration < 1) {
-        alert("Duration must be at least 1 day.");
-        return;
-    }
-    if (duration > 10) {
-        alert("Maximum rental duration is 10 days.");
-        return;
-    }
-
-    // 3. Date Validation: Not in the past
-    const selectedDate = new Date(date);
-    const today = new Date();
-    today.setHours(0,0,0,0); // normalize today to midnight
-    if (selectedDate < today) {
-        alert("Please select a valid future date.");
-        return;
-    }
-
-    const totalCost = currentRentProduct.price * duration;
-
-    const inquiry = {
-        date: new Date().toLocaleString(),
-        productId: currentRentProduct.id,
-        productName: currentRentProduct.name,
-        customerName: name,
-        mobile: mobile,
-        requestedDate: date,
-        duration: duration
-    };
-
-    const existingInquiries = JSON.parse(localStorage.getItem('luxe_inquiries') || '[]');
-    existingInquiries.unshift(inquiry);
-    localStorage.setItem('luxe_inquiries', JSON.stringify(existingInquiries));
-
-    const productLink = new URL(`detail.html?id=${currentRentProduct.id}`, window.location.href).href;
-    
-    const message = 
-`👋 *Hello, I'm interested in renting this outfit!*
-
-👗 *OUTFIT DETAILS*
-• *Name:* ${currentRentProduct.name}
-• *Code:* ${currentRentProduct.id}
-• *Rate:* ₹${currentRentProduct.price.toLocaleString()} / day
-🔗 *View Item:* ${productLink}
-
-👤 *MY DETAILS*
-• *Name:* ${name}
-• *Mobile:* ${mobile}
-📅 *Event Date:* ${date}
-⏱️ *Duration:* ${duration} Days
-💰 *Total Est. Rent:* ₹${totalCost.toLocaleString()}
-
-✨ *Please confirm if it is available for this date.*`;
-
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    
-    const btn = document.getElementById('confirm-rent-btn');
-    handleAction(btn, url, true);
-    
-    setTimeout(() => {
-        closeRentModal();
-    }, 2000);
-}
-
 
 // --- Quick View Modal Logic ---
 
