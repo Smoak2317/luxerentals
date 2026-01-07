@@ -1,5 +1,6 @@
 
 
+
 // Admin Logic
 let adminProducts = []; // Holds the state of products in the admin panel
 let adminInquiries = [];
@@ -235,6 +236,25 @@ function toggleAvailability(id) {
     }
 }
 
+// --- Image Management Helpers ---
+
+function addImageInput(url = '') {
+    const container = document.getElementById('image-inputs-container');
+    const div = document.createElement('div');
+    div.className = "flex gap-2 items-center animate-fade-in";
+    div.innerHTML = `
+        <div class="flex-grow relative">
+            <input type="text" value="${url}" class="image-url-input w-full border border-gray-200 rounded-xl p-3 pr-10 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition bg-gray-50/50 focus:bg-white text-sm" placeholder="https://example.com/image.jpg">
+            <i data-lucide="link" class="w-4 h-4 text-gray-300 absolute right-3 top-3.5 pointer-events-none"></i>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600 p-2.5 hover:bg-red-50 rounded-lg transition flex-shrink-0" title="Remove Image">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    `;
+    container.appendChild(div);
+    if(window.lucide) lucide.createIcons();
+}
+
 // Open Modal for ADD - Smooth Transition
 function openAddModal() {
     const modal = document.getElementById('add-modal');
@@ -252,7 +272,12 @@ function openAddModal() {
     document.getElementById('new-original').value = "";
     document.getElementById('new-size').value = "";
     document.getElementById('new-desc').value = "";
-    document.getElementById('new-images').value = "";
+    
+    // Reset Image Inputs
+    const imgContainer = document.getElementById('image-inputs-container');
+    imgContainer.innerHTML = '';
+    addImageInput(); // Add one empty field by default
+
     document.getElementById('tag-most-rented').checked = false;
     document.getElementById('tag-new-arrival').checked = false;
 
@@ -283,9 +308,12 @@ function editProduct(id) {
     document.getElementById('new-size').value = product.size;
     document.getElementById('new-desc').value = product.description;
     
-    // Set Image URLs (Join array with newlines)
+    // Populate Image Inputs
+    const imgContainer = document.getElementById('image-inputs-container');
+    imgContainer.innerHTML = '';
+    
     const images = product.images && product.images.length > 0 ? product.images : [product.image];
-    document.getElementById('new-images').value = images.join('\n');
+    images.forEach(url => addImageInput(url));
     
     // Set Tags
     const tags = product.tags || [];
@@ -326,9 +354,11 @@ function saveProduct() {
         const editId = document.getElementById('edit-mode-id').value;
         const isEdit = !!editId;
 
-        // Get Images from Textarea (Split by newline and filter empty)
-        const imagesInput = document.getElementById('new-images').value.trim();
-        const imagesList = imagesInput.split('\n').map(url => url.trim()).filter(url => url.length > 0);
+        // Get Images from Dynamic Inputs
+        const imageInputs = document.querySelectorAll('.image-url-input');
+        const imagesList = Array.from(imageInputs)
+            .map(input => input.value.trim())
+            .filter(url => url.length > 0);
         
         // Get Tags
         const tags = [];
