@@ -126,17 +126,6 @@ function createProductCard(product, index = 0) {
         }).join('') + `</div>`;
     }
 
-    // Button Style based on availability
-    const buttonClass = product.available 
-        ? "bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800" 
-        : "bg-gray-200 text-gray-400 cursor-not-allowed";
-    
-    const buttonAction = product.available 
-        ? `onclick="event.stopPropagation(); openRentModal({id:'${product.id}', name:'${product.name.replace(/'/g, "\\'")}', price:${product.price}, images:['${mainImage}'], category:'${product.category}'})"`
-        : `onclick="event.stopPropagation();"`;
-
-    const buttonText = product.available ? "Ask for Rent" : "Booked";
-
     return `
         <div class="group relative block h-full">
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col h-full hover-lift">
@@ -162,8 +151,8 @@ function createProductCard(product, index = 0) {
                     <button onclick="openQuickView(event, '${product.id}')" class="hidden md:block absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white text-brand-600 font-bold px-5 py-2 rounded-full shadow-lg hover:bg-brand-50 z-20 text-xs whitespace-nowrap border border-pink-100">
                         Quick View
                     </button>
-                    <!-- Mobile Rent Button (Visible on mobile for quick access) -->
-                     <button ${buttonAction} class="md:hidden absolute bottom-2 left-2 bg-white/90 p-2 rounded-full shadow-md text-green-600 hover:text-green-700 transition-all z-20 backdrop-blur-[2px]">
+                    <!-- Mobile Rent Button -->
+                    <button onclick="event.stopPropagation(); openRentModal({id:'${product.id}', name:'${product.name.replace(/'/g, "\\'")}', price:${product.price}, images:['${mainImage}'], category:'${product.category}'})" class="md:hidden absolute bottom-2 left-2 bg-white/90 p-2 rounded-full shadow-md text-green-600 hover:text-green-700 transition-all z-20 backdrop-blur-[2px]">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                     </button>
                 </div>
@@ -171,14 +160,15 @@ function createProductCard(product, index = 0) {
                 <!-- Content - Reduced Padding & Font Sizes -->
                 <div class="p-2 md:p-4 flex flex-col flex-grow cursor-pointer" onclick="window.location.href='detail.html?id=${product.id}'">
                     <div class="text-[9px] font-bold text-brand-500 uppercase tracking-widest mb-1 truncate">${product.category}</div>
-                    <h3 class="text-xs md:text-base font-serif font-bold text-gray-900 mb-2 leading-snug group-hover:text-brand-600 transition-colors line-clamp-2 min-h-[2.4em] md:min-h-[2.5em]">${product.name}</h3>
+                    <h3 class="text-xs md:text-base font-serif font-bold text-gray-900 mb-1 leading-snug group-hover:text-brand-600 transition-colors line-clamp-2 min-h-[2.4em] md:min-h-[2.5em]">${product.name}</h3>
                     
-                    <div class="mt-auto pt-3 border-t border-stone-100 w-full">
-                        <button ${buttonAction} 
-                            class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-xs md:text-sm font-bold shadow-md hover:shadow-lg transition-all transform active:scale-95 ${buttonClass}">
-                            <span>${buttonText}</span>
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                        </button>
+                    <div class="mt-auto pt-2 flex items-center justify-between border-t border-stone-100">
+                        <div class="text-xs font-bold text-brand-600 uppercase tracking-wide">
+                            Ask for Rent
+                        </div>
+                        <div class="w-6 h-6 rounded-full bg-pink-50 flex items-center justify-center text-brand-500 group-hover:bg-brand-500 group-hover:text-white transition-colors flex-shrink-0 ml-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -476,12 +466,35 @@ async function initDetail() {
         waBtn.className = "flex-grow flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-bold transition-all shadow-md hover:shadow-xl shadow-green-500/10 transform hover:-translate-y-0.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700";
         waBtn.innerHTML = `
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
+            <span>Ask for Rent on WhatsApp</span>
+        `;
+    } else {
+        waBtn.classList.add('bg-gray-300', 'cursor-not-allowed', 'flex-grow');
+        waBtn.classList.remove('bg-gradient-to-r', 'from-green-500', 'to-emerald-600');
+        waBtn.innerHTML = '<span>Unavailable</span>';
+        waBtn.onclick = (e) => e.preventDefault();
+    }
+    
+    // Attach Share Event
+    if (shareBtn) {
+        shareBtn.onclick = (e) => shareProduct(e, product.id);
+    }
+
+    const similarContainer = document.getElementById('similar-products-grid');
+    if (similarContainer) {
+        const similar = products
+            .filter(p => p.category === product.category && p.id !== product.id)
+            .slice(0, 4);
+        similarContainer.innerHTML = similar.map(p => createProductCard(p, 10)).join('');
+    }
+
+    document.getElementById('detail-loading').classList.add('hidden');
+    document.getElementById('detail-content').classList.remove('hidden');
+    const backLink = document.getElementById('detail-back-link');
+    if(backLink) {
+        backLink.classList.remove('hidden');
+        backLink.classList.add('inline-flex');
+    }
 }
 
 // --- Rent Modal Logic ---
